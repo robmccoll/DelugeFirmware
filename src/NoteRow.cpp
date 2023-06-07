@@ -1848,10 +1848,9 @@ void NoteRow::attemptLateStartOfNextNoteToPlay(ModelStackWithNoteRow* modelStack
 
 	bool currentlyPlayingReversed = modelStack->isCurrentlyPlayingReversed();
 
-	if (currentlyPlayingReversed && !((InstrumentClip*)modelStack->getTimelineCounter())->allowNoteTails(modelStack)) {
-		// Not supported yet - would be tricky cos by the time it's "late", we'd be left of note->pos
-		return;
-	}
+	if (currentlyPlayingReversed && !((InstrumentClip*)modelStack->getTimelineCounter())->allowNoteTails(modelStack))
+		return; // Not supported yet - would be tricky cos by the time it's "late",
+		        // we'd be left of note->pos
 
 	int32_t numSwungTicksInSinceLastActionedOne = playbackHandler.getNumSwungTicksInSinceLastActionedSwungTick();
 
@@ -2192,8 +2191,9 @@ bool NoteRow::generateRepeats(ModelStackWithNoteRow* modelStack, uint32_t oldLoo
 
 	if (!numNotesBefore) return true;
 
-	// Snapshot how Notes were before, in bulk
-	if (action) action->recordNoteArrayChangeIfNotAlreadySnapshotted(clip, modelStack->noteRowId, &notes, false);
+	if (action)
+		action->recordNoteArrayChangeIfNotAlreadySnapshotted(clip, modelStack->noteRowId, &notes,
+		                                                     false); // Snapshot how Notes were before, in bulk
 
 	// Deal with single droning note case - but don't do this for samples in CUT or STRETCH mode
 	if (numNotesBefore == 1 && notes.getElement(0)->length == oldLoopLength) {
@@ -2545,7 +2545,7 @@ int NoteRow::readFromFile(int* minY, InstrumentClip* parentClip, Song* song, int
 
 		else if (!strcmp(tagName, "drumIndex")) {
 			drum =
-			    (Drum*)storageManager
+			    (Drum*)(uintptr_t)storageManager
 			        .readTagOrAttributeValueInt(); // Sneaky - we store an integer in place of this pointer, then swap it back to something meaningful later
 		}
 
@@ -2584,7 +2584,7 @@ int NoteRow::readFromFile(int* minY, InstrumentClip* parentClip, Song* song, int
 			// Sneaky sorta hack for 2016 files - allow more params to be loaded into a ParamManager that already had some loading done by the Drum
 			if (storageManager.firmwareVersionOfFileBeingRead == FIRMWARE_OLD && parentClip->output) {
 
-				SoundDrum* actualDrum = (SoundDrum*)((Kit*)parentClip->output)->getDrumFromIndex((int)drum);
+				SoundDrum* actualDrum = (SoundDrum*)((Kit*)parentClip->output)->getDrumFromIndex((uintptr_t)drum);
 
 				if (actualDrum) {
 					ParamManager* existingParamManager =
@@ -2671,7 +2671,7 @@ doReadNoteData:
 
 			{
 				char const* firstChars = storageManager.readNextCharsOfTagOrAttributeValue(2);
-				if (!firstChars || *(uint16_t*)firstChars != 'x0') goto getOut;
+				if (!firstChars || *(uint16_t*)firstChars != 0x7830 /*'x0'*/) goto getOut;
 			}
 
 			while (true) {
@@ -3132,12 +3132,12 @@ bool NoteRow::paste(ModelStackWithNoteRow* modelStack, CopiedNoteRow* copiedNote
 	int effectiveLength = modelStack->getLoopLength();
 	int32_t maxPos = getMin(screenEndPos, effectiveLength);
 
-	if (action) {
-		// Snapshot how Notes were before, in bulk. It's quite likely that this has already been done as the area was
-		// cleared - but not if notes was empty
+	if (action)
 		action->recordNoteArrayChangeIfNotAlreadySnapshotted((InstrumentClip*)modelStack->getTimelineCounter(),
-		                                                     modelStack->noteRowId, &notes, false);
-	}
+		                                                     modelStack->noteRowId, &notes,
+		                                                     false); // Snapshot how Notes were before, in bulk.
+	// It's quite likely that this has already been done
+	// as the area was cleared - but not if notes was empty
 
 	// TODO: this could be done without all these many inserts, and could be improved further by "stealing" the data into the action, above
 	for (int n = 0; n < copiedNoteRow->numNotes; n++) {

@@ -66,7 +66,7 @@ struct SearchRecord {
 };
 
 // Like searchMultiple(), but much less complex as we know it's only doing 2 search terms.
-void OrderedResizeableArrayWith32bitKey::searchDual(int32_t const* __restrict__ searchTerms,
+void OrderedResizeableArrayWith32bitKey::searchDual(uintptr_t const* __restrict__ searchTerms,
                                                     int* __restrict__ resultingIndexes) {
 
 	int rangeBegin = 0;

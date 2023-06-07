@@ -23,7 +23,7 @@
 		strength2 = vset_lane_u16(rshifted, strength2, i);                                                             \
                                                                                                                        \
 		uint32_t whichValue = phaseTemp >> (32 - tableSizeMagnitude);                                                  \
-		uint32_t* readAddress = (uint32_t*)((uint32_t)table + (whichValue << 1));                                      \
+		uint32_t* readAddress = (uint32_t*)((uintptr_t)table + (whichValue << 1));                                     \
                                                                                                                        \
 		readValue = vld1q_lane_u32(readAddress, readValue, i);                                                         \
 	}
@@ -55,7 +55,7 @@
 			rshiftedA = vset_lane_s16(phaseTemp >> rshiftAmount, rshiftedA, i);                                        \
                                                                                                                        \
 			uint32_t whichValue = phaseTemp >> (32 - tableSizeMagnitude);                                              \
-			uint32_t* readAddress = (uint32_t*)((uint32_t)table + (whichValue << 1));                                  \
+			uint32_t* readAddress = (uint32_t*)((uintptr_t)table + (whichValue << 1));                                 \
 			readValueA = vld1q_lane_u32(readAddress, readValueA, i);                                                   \
 		}                                                                                                              \
                                                                                                                        \
@@ -64,7 +64,7 @@
 			rshiftedB = vset_lane_s16(phaseLater >> rshiftAmount, rshiftedB, i);                                       \
                                                                                                                        \
 			uint32_t whichValue = phaseLater >> (32 - tableSizeMagnitude);                                             \
-			uint32_t* readAddress = (uint32_t*)((uint32_t)table + (whichValue << 1));                                  \
+			uint32_t* readAddress = (uint32_t*)((uintptr_t)table + (whichValue << 1));                                 \
 			readValueB = vld1q_lane_u32(readAddress, readValueB, i);                                                   \
 		}                                                                                                              \
 	}

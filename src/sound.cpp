@@ -1673,9 +1673,10 @@ void Sound::sampleZoneChanged(int markerType, int s, ModelStackWithSoundFlags* m
 // Unlike most functions, this one accepts modelStack as NULL, because when unassigning all voices e.g. on song swap, we won't have it.
 void Sound::reassessRenderSkippingStatus(ModelStackWithSoundFlags* modelStack, bool shouldJustCutModFX) {
 
-	// TODO: should get the caller to provide this, cos they usually already have it. In fact, should put this on the
-	// ModelStack, cos many deeper-nested functions called by this one need it too!
-	ArpeggiatorSettings* arpSettings = getArpSettings();
+	ArpeggiatorSettings* arpSettings =
+	    getArpSettings(); // TODO: should get the caller to provide this, cos they usually already have it.
+	// In fact, should put this on the ModelStack, cos many deeper-nested functions called by this one
+	// need it too!
 
 	bool skippingStatusNow = (!numVoicesAssigned && !delay.repeatsUntilAbandon && !stutterer.status
 	                          && (!arpSettings || !getArp()->hasAnyInputNotesActive() || !arpSettings->mode));
@@ -2291,7 +2292,7 @@ bool Sound::learnKnob(MIDIDevice* fromDevice, ParamDescriptor paramDescriptor, u
 void Sound::ensureInaccessibleParamPresetValuesWithoutKnobsAreZero(Song* song) {
 
 	// We gotta do this for any backedUpParamManagers too!
-	int i = song->backedUpParamManagers.search((uint32_t)(ModControllableAudio*)this,
+	int i = song->backedUpParamManagers.search((uintptr_t)(ModControllableAudio*)this,
 	                                           GREATER_OR_EQUAL); // Search by first word only.
 
 	while (true) {

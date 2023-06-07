@@ -23,12 +23,12 @@
 #include "definitions.h"
 
 struct EmptySpaceRecord {
-	uint32_t length;
-	uint32_t address;
+	uintptr_t length;
+	uintptr_t address;
 };
 
 struct NeighbouringMemoryGrabAttemptResult {
-	uint32_t address; // 0 means didn't grab / not found.
+	uintptr_t address; // 0 means didn't grab / not found.
 	int amountsExtended[2];
 	uint32_t longestRunFound; // Only valid if didn't return some space.
 };
@@ -43,7 +43,7 @@ struct NeighbouringMemoryGrabAttemptResult {
 class MemoryRegion {
 public:
 	MemoryRegion();
-	void setup(void* emptySpacesMemory, int emptySpacesMemorySize, uint32_t regionBegin, uint32_t regionEnd);
+	void setup(void* emptySpacesMemory, int emptySpacesMemorySize, uintptr_t regionBegin, uintptr_t regionEnd);
 	void* alloc(uint32_t requiredSize, uint32_t* getAllocatedSize, bool makeStealable, void* thingNotToStealFrom,
 	            bool getBiggestAllocationPossible);
 	uint32_t shortenRight(void* address, uint32_t newSize);
@@ -55,10 +55,10 @@ public:
 	void verifyMemoryNotFree(void* address, uint32_t spaceSize);
 
 	BidirectionalLinkedList stealableClusterQueues[NUM_STEALABLE_QUEUES];
-	// Keeps track, semi-accurately, of biggest runs of memory that could be stolen. In a perfect world, we'd have a second
-	// index on stealableClusterQueues[q], for run length. Although even that wouldn't automatically reflect changes to run
-	// lengths as neighbouring memory is allocated.
-	uint32_t stealableClusterQueueLongestRuns[NUM_STEALABLE_QUEUES];
+	uint32_t stealableClusterQueueLongestRuns
+	    [NUM_STEALABLE_QUEUES]; // Keeps track, semi-accurately, of biggest runs of memory that could be stolen.
+	// In a perfect world, we'd have a second index on stealableClusterQueues[q], for run length.
+	// Although even that wouldn't automatically reflect changes to run lengths as neighbouring memory is allocated.
 	OrderedResizeableArrayWithMultiWordKey emptySpaces;
 	int numAllocations;
 
@@ -68,12 +68,12 @@ public:
 
 private:
 	uint32_t freeSomeStealableMemory(int totalSizeNeeded, void* thingNotToStealFrom, int* __restrict__ foundSpaceSize);
-	void markSpaceAsEmpty(uint32_t spaceStart, uint32_t spaceSize, bool mayLookLeft = true, bool mayLookRight = true);
+	void markSpaceAsEmpty(uintptr_t spaceStart, uint32_t spaceSize, bool mayLookLeft = true, bool mayLookRight = true);
 	NeighbouringMemoryGrabAttemptResult
 	attemptToGrabNeighbouringMemory(void* originalSpaceAddress, int originalSpaceSize, int minAmountToExtend,
 	                                int idealAmountToExtend, void* thingNotToStealFrom,
 	                                uint32_t markWithTraversalNo = 0, bool originalSpaceNeedsStealing = false);
-	void writeTempHeadersBeforeASteal(uint32_t newStartAddress, uint32_t newSize);
+	void writeTempHeadersBeforeASteal(uintptr_t newStartAddress, uint32_t newSize);
 	void sanityCheck();
 };
 

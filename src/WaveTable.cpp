@@ -24,12 +24,12 @@
 #include "WaveTableReader.h"
 #include "FFTConfigManager.h"
 #include "NE10.h"
-#include "arm_neon.h"
 #include "numericdriver.h"
 #include <new>
 #include "mtu.h"
 #include "renderWave.h"
 #include "AudioEngine.h"
+#include "arm_neon.h"
 
 extern "C" {
 #include "uart_all_cpus.h"
@@ -320,9 +320,10 @@ gotError5:
 	AudioEngine::logAction("finalizing vars");
 
 	WaveTableBand* initialBand = (WaveTableBand*)bands.getElementAddress(0);
-	// Even for non-power-of-two cycle size files, we'll still write the data in here even though it's not needed and
-	// will be overwritten, just since we're using the same code as for power-of-two.
-	int16_t* __restrict__ initialBandWritePos = initialBand->dataAccessAddress;
+	int16_t* __restrict__ initialBandWritePos =
+	    initialBand
+	        ->dataAccessAddress; // Even for non-power-of-two cycle size files, we'll still write the data in here even though
+	// it's not needed and will be overwritten, just since we're using the same code as for power-of-two.
 
 	int clusterIndex = audioDataStartPosBytes >> audioFileManager.clusterSizeMagnitude;
 	int byteIndexWithinCluster = audioDataStartPosBytes & (audioFileManager.clusterSize - 1);
@@ -457,7 +458,7 @@ gotError5:
 			// Stop before we get to the final sample that overlaps the end of the cluster, if that happens.
 			sourceStopAt = sourceStopAt - byteDepth + 1;
 
-			int numSourceBytesLookingAtThisCluster = (uint32_t)sourceStopAt - (uint32_t)source;
+			int numSourceBytesLookingAtThisCluster = (uintptr_t)sourceStopAt - (uintptr_t)source;
 			if (numSourceBytesLookingAtThisCluster > sourceBytesLeftToCopyThisCycle)
 				sourceStopAt = source + sourceBytesLeftToCopyThisCycle;
 
@@ -476,7 +477,7 @@ gotError5:
 				source += byteDepth;
 			}
 
-			int bytesJustWritten = (uint32_t)initialBandWritePos - (uint32_t)bandDestinationStartedAt;
+			int bytesJustWritten = (uintptr_t)initialBandWritePos - (uintptr_t)bandDestinationStartedAt;
 			int samplesJustCopied = bytesJustWritten >> 1;
 			int sourceBytesJustRead = samplesJustCopied * byteDepth;
 			sourceBytesLeftToCopyThisCycle -= sourceBytesJustRead;
@@ -763,7 +764,7 @@ transformBandToTimeDomain:
 				uint32_t amountShortened = generalMemoryAllocator.shortenLeft(
 				    band->data, idealAmountToShorten,
 				    sizeof(WaveTableBandData)); // Tell it to move the WaveTableBandData "header" forward
-				band->data = (WaveTableBandData*)((uint32_t)band->data + amountShortened);
+				band->data = (WaveTableBandData*)((uintptr_t)band->data + amountShortened);
 			}
 		}
 	}
@@ -815,7 +816,7 @@ WaveTable::doRenderingLoopSingleCycle(int32_t* __restrict__ thisSample, int32_t 
 		        - bandCycleSizeMagnitude); // The -5 is for 32 bytes (16 samples) per line in the windowed sinc table.
 		windowedSincTableLineOffsetBytes &= 0b111100000;
 		int16_t const* __restrict__ sincKernelReadPos =
-		    (int16_t const*)((uint32_t)&kernel[0] + windowedSincTableLineOffsetBytes);
+		    (int16_t const*)((uintptr_t)&kernel[0] + windowedSincTableLineOffsetBytes);
 
 		int16x8_t kernelVector[INTERPOLATION_MAX_NUM_SAMPLES >> 3];
 
@@ -914,7 +915,7 @@ WaveTable::doRenderingLoop(int32_t* __restrict__ thisSample, int32_t const* buff
 		        - bandCycleSizeMagnitude); // The -5 is for 32 bytes (16 samples) per line in the windowed sinc table.
 		windowedSincTableLineOffsetBytes &= 0b111100000;
 		int16_t const* __restrict__ sincKernelReadPos =
-		    (int16_t const*)((uint32_t)&kernel[0] + windowedSincTableLineOffsetBytes);
+		    (int16_t const*)((uintptr_t)&kernel[0] + windowedSincTableLineOffsetBytes);
 
 		int16x8_t kernelVector[INTERPOLATION_MAX_NUM_SAMPLES >> 3];
 

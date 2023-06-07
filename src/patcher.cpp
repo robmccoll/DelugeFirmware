@@ -30,11 +30,11 @@ Patcher::Patcher(const PatchableInfo* newInfo) : patchableInfo(newInfo) {
 }
 
 inline int32_t* Patcher::getParamFinalValuesPointer() {
-	return (int32_t*)((uint32_t)this + patchableInfo->paramFinalValuesOffset);
+	return (int32_t*)((uintptr_t)this + patchableInfo->paramFinalValuesOffset);
 }
 
 inline int32_t Patcher::getSourceValue(int s) {
-	return ((int32_t*)((uint32_t)this + patchableInfo->sourceValuesOffset))[s];
+	return ((int32_t*)((uintptr_t)this + patchableInfo->sourceValuesOffset))[s];
 }
 
 // If NULL Destination, that means no cables - just the preset value

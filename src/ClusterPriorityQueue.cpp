@@ -27,7 +27,7 @@ ClusterPriorityQueue::ClusterPriorityQueue()
 
 // Returns error
 int ClusterPriorityQueue::add(Cluster* cluster, uint32_t priorityRating) {
-	int i = insertAtKey((int32_t)cluster);
+	int i = insertAtKey((intptr_t)cluster);
 	if (i == -1) return ERROR_INSUFFICIENT_RAM;
 
 	PriorityQueueElement* element = (PriorityQueueElement*)getElementAddress(i);

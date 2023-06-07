@@ -379,7 +379,7 @@ int AudioFileManager::setupAlternateAudioFilePath(String* newPath, int dirPathLe
 		char const* newPathChars = newPath->get();
 		char const* slashAddress = strchr(&newPathChars[pos], '/');
 		if (!slashAddress) break;
-		int slashPos = (uint32_t)slashAddress - (uint32_t)newPathChars;
+		int slashPos = (uintptr_t)slashAddress - (uintptr_t)newPathChars;
 		int error = newPath->setChar('_', slashPos);
 		if (error) return error;
 		pos = slashPos + 1;
@@ -878,9 +878,9 @@ getOutEarly:
 	}
 
 #if ALPHA_OR_BETA_VERSION
-	if ((uint32_t)cluster->data & 0b11) {
+	if ((uintptr_t)cluster->data & 0b11) {
 		Uart::print("SD read address misaligned by ");
-		Uart::println((int32_t)((uint32_t)cluster->data & 0b11));
+		Uart::println((int32_t)((uintptr_t)cluster->data & 0b11));
 	}
 #endif
 

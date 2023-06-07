@@ -25,9 +25,9 @@ VoiceVector::VoiceVector() {
 void VoiceVector::checkVoiceExists(Voice* voice, Sound* sound, char const* errorCode) {
 
 	if (ALPHA_OR_BETA_VERSION) {
-		uint32_t searchWords[2];
-		searchWords[0] = (uint32_t)sound;
-		searchWords[1] = (uint32_t)voice;
+		uintptr_t searchWords[2];
+		searchWords[0] = (uintptr_t)sound;
+		searchWords[1] = (uintptr_t)voice;
 		int i = searchMultiWordExact(searchWords);
 
 		if (i == -1) numericDriver.freezeWithError(errorCode);
@@ -37,9 +37,9 @@ void VoiceVector::checkVoiceExists(Voice* voice, Sound* sound, char const* error
 // Returns results as if GREAT_OR_EQUAL had been supplied to search. To turn this into LESS, subtract 1
 void VoiceVector::getRangeForSound(Sound* sound, int* __restrict__ ends) {
 
-	int32_t searchTerms[2];
-	searchTerms[0] = (uint32_t)sound;
-	searchTerms[1] = (uint32_t)sound + 1;
+	uintptr_t searchTerms[2];
+	searchTerms[0] = (uintptr_t)sound;
+	searchTerms[1] = (uintptr_t)sound + 1;
 
 	searchDual(searchTerms, ends);
 }

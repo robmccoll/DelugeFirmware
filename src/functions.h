@@ -64,7 +64,11 @@ uint8_t hexToByte(char const* firstChar);
 static inline int32_t multiply_32x32_rshift32(int32_t a, int32_t b) __attribute__((always_inline, unused));
 static inline int32_t multiply_32x32_rshift32(int32_t a, int32_t b) {
 	int32_t out;
+#ifdef __arm__
 	asm("smmul %0, %1, %2" : "=r"(out) : "r"(a), "r"(b));
+#else
+	out = (int32_t)((((int64_t)a) * ((int64_t)b)) >> 32);
+#endif
 	return out;
 }
 
@@ -72,7 +76,11 @@ static inline int32_t multiply_32x32_rshift32(int32_t a, int32_t b) {
 static inline int32_t multiply_32x32_rshift32_rounded(int32_t a, int32_t b) __attribute__((always_inline, unused));
 static inline int32_t multiply_32x32_rshift32_rounded(int32_t a, int32_t b) {
 	int32_t out;
+#ifdef __arm__
 	asm("smmulr %0, %1, %2" : "=r"(out) : "r"(a), "r"(b));
+#else
+	out = (int32_t)(((((int64_t)a) * ((int64_t)b)) + 0x80000000) >> 32);
+#endif
 	return out;
 }
 
@@ -81,7 +89,15 @@ static inline int32_t multiply_accumulate_32x32_rshift32_rounded(int32_t sum, in
     __attribute__((always_inline, unused));
 static inline int32_t multiply_accumulate_32x32_rshift32_rounded(int32_t sum, int32_t a, int32_t b) {
 	int32_t out;
+#ifdef __arm__
 	asm("smmlar %0, %2, %3, %1" : "=r"(out) : "r"(sum), "r"(a), "r"(b));
+#else
+	// NOTE: COMPAT - ARM doc indicates that the accumulator value (sum) is
+	// added after the rounding and shift, but for smmlsr, it seems that the
+	// accumulator is shifted up and subtracted before the rounding and
+	// downshift
+	out = ((int32_t)(((((int64_t)a) * ((int64_t)b)) + 0x80000000) >> 32)) + sum;
+#endif
 	return out;
 }
 
@@ -90,7 +106,15 @@ static inline int32_t multiply_subtract_32x32_rshift32_rounded(int32_t sum, int3
     __attribute__((always_inline, unused));
 static inline int32_t multiply_subtract_32x32_rshift32_rounded(int32_t sum, int32_t a, int32_t b) {
 	int32_t out;
+#ifdef __arm__
 	asm("smmlsr %0, %2, %3, %1" : "=r"(out) : "r"(sum), "r"(a), "r"(b));
+#else
+	// NOTE: COMPAT - ARM doc indicates that the accumulator value (sum) is
+	// added after the rounding and shift, but for smmlsr, it seems that the
+	// accumulator is shifted up and subtracted before the rounding and
+	// downshift
+	out = ((int32_t)(((((int64_t)a) * ((int64_t)b)) - (((int64_t)sum) << 32) + 0x80000000) >> 32));
+#endif
 	return out;
 }
 
@@ -105,7 +129,13 @@ static inline int32_t add_saturation(int32_t a, int32_t b) {
 static inline int32_t signed_saturate(int32_t val, uint8_t bits) __attribute__((always_inline, unused));
 static inline int32_t signed_saturate(int32_t val, uint8_t bits) {
 	int32_t out;
+#ifdef __arm__
 	asm("ssat %0, %1, %2" : "=r"(out) : "I"(bits), "r"(val));
+#else
+	int32_t max = ((int32_t)1) << bits;
+	int32_t min = -(((int32_t)1) << bits);
+	out = val < min ? min : val > max ? max : val;
+#endif
 	return out;
 }
 
@@ -490,19 +520,32 @@ int encodeIterationDependence(int divisor, int iterationWithinDivisor);
 
 inline uint32_t swapEndianness32(uint32_t input) {
 	int32_t out;
+#ifdef __arm__
 	asm("rev %0, %1" : "=r"(out) : "r"(input));
+#else
+	out = ((input >> 24) & 0x000000FF) | ((input << 8) & 0x00FF0000) | ((input << 8) & 0x0000FF00)
+	      | ((input << 24) & 0xFF000000);
+#endif
 	return out;
 }
 
 inline uint32_t swapEndianness2x16(uint32_t input) {
 	int32_t out;
+#ifdef __arm__
 	asm("rev16 %0, %1" : "=r"(out) : "r"(input));
+#else
+	out = ((input >> 8) & 0x00FF00FF) | ((input << 8) & 0xFF00FF00);
+#endif
 	return out;
 }
 
 inline int32_t clz(uint32_t input) {
 	int32_t out;
+#ifdef __arm__
 	asm("clz %0, %1" : "=r"(out) : "r"(input));
+#else
+	out = __builtin_clz(input);
+#endif
 	return out;
 }
 

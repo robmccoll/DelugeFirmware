@@ -640,7 +640,7 @@ nonNumeric:
 		char const* underscoreAddress = strrchr(oldNameChars, ' ');
 		if (underscoreAddress) {
 lookAtSuffixNumber:
-			int underscorePos = (uint32_t)underscoreAddress - (uint32_t)oldNameChars;
+			int underscorePos = underscoreAddress - oldNameChars;
 			numberStartPos = underscorePos + 1;
 			int oldNumberLength = oldNameLength - numberStartPos;
 			if (oldNumberLength > 0) {

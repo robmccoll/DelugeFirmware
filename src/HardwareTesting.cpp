@@ -51,7 +51,7 @@ void ramTestUart() {
 		Uart::println("writing to ram");
 		address = (uint32_t*)EXTERNAL_MEMORY_BEGIN;
 		while (address != (uint32_t*)EXTERNAL_MEMORY_END) {
-			*address = (uint32_t)address;
+			*address = (uintptr_t)address;
 			address++;
 		}
 		//}
@@ -60,14 +60,14 @@ void ramTestUart() {
 		Uart::println("reading back from ram. Checking for errors every megabyte");
 		address = (uint32_t*)EXTERNAL_MEMORY_BEGIN;
 		while (address != (uint32_t*)EXTERNAL_MEMORY_END) {
-			if (*address != (uint32_t)address) {
+			if ((uintptr_t)*address != (uintptr_t)address) {
 
-				uint32_t errorAtBlockNow = ((uint32_t)address) & (0xFFF00000);
+				uint32_t errorAtBlockNow = ((uintptr_t)address) & (0xFFF00000);
 				if (errorAtBlockNow != lastErrorAt) {
 					while (uartGetTxBufferFullnessByItem(UART_ITEM_MIDI) > 100)
 						;
 					Uart::print("error at ");
-					Uart::print((uint32_t)address);
+					Uart::print((uintptr_t)address);
 					Uart::print(". got ");
 					Uart::println(*address);
 					//while(1);
@@ -313,11 +313,11 @@ void ramTestLED(bool stuffAlreadySetUp) {
 		address = (uint32_t*)0x0C000000;
 		while (address != (uint32_t*)0x10000000) {
 
-			if (((uint32_t)address & 4095) == 0) {
+			if (((uintptr_t)address & 4095) == 0) {
 				readInputsForHardwareTest(testButtonStates);
 				//AudioEngine::routine(false);
 			}
-			*address = (uint32_t)address;
+			*address = (uintptr_t)address;
 			address++;
 		}
 
@@ -325,12 +325,12 @@ void ramTestLED(bool stuffAlreadySetUp) {
 
 		address = (uint32_t*)0x0C000000;
 		while (address != (uint32_t*)0x10000000) {
-			if (((uint32_t)address & 4095) == 0) {
+			if (((uintptr_t)address & 4095) == 0) {
 				readInputsForHardwareTest(testButtonStates);
 				//AudioEngine::routine(false);
 			}
 
-			if (*address != (uint32_t)address) {
+			if (*address != (uintptr_t)address) {
 
 				// Error!!!
 				while (1) {

@@ -1553,7 +1553,7 @@ int32_t doFMNew(uint32_t carrierPhase, uint32_t phaseShift) {
 
 	uint32_t readOffset = (phaseSmall >> (24 - 8 - 2)) & 0b1111111100;
 
-	uint32_t readValue = *(uint32_t*)((uint32_t)sineWaveDiff + readOffset);
+	uint32_t readValue = *(uint32_t*)((uintptr_t)sineWaveDiff + readOffset);
 	int32_t value = readValue << 16;
 	int32_t diff = (int32_t)readValue >> 16;
 	return value + diff * strength2;
@@ -1571,7 +1571,7 @@ inline int32x4_t getSineVector(uint32_t* thisPhase, uint32_t phaseIncrement) {
 
 		uint32_t readOffset = whichValue << 2;
 
-		readValue[i] = *(uint32_t*)((uint32_t)sineWaveDiff + readOffset);
+		readValue[i] = *(uint32_t*)((uintptr_t)sineWaveDiff + readOffset);
 	}
 
 	int32x4_t enlargedValue1 = vreinterpretq_s32_u32(vshlq_n_u32(readValue, 16));
@@ -1588,7 +1588,7 @@ inline int32x4_t doFMVector(uint32x4_t phaseVector, uint32x4_t phaseShift) {
 #define fmVectorLoopComponent(i)                                                                                       \
 	{                                                                                                                  \
 		uint32_t readOffsetNow = (vgetq_lane_u32(finalPhase, i) >> (32 - SINE_TABLE_SIZE_MAGNITUDE)) << 2;             \
-		uint32_t* thisReadAddress = (uint32_t*)((uint32_t)sineWaveDiff + readOffsetNow);                               \
+		uint32_t* thisReadAddress = (uint32_t*)((uintptr_t)sineWaveDiff + readOffsetNow);                              \
 		readValue = vld1q_lane_u32(thisReadAddress, readValue, i);                                                     \
 	}
 

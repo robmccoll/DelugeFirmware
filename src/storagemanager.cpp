@@ -374,9 +374,9 @@ char const* StorageManager::readNextTagOrAttributeName() {
 
 	case IN_TAG_PAST_NAME:
 		toReturn = readNextAttributeName();
-		// If depth has changed, this means we met a /> and must get out
-		if (*toReturn || tagDepthFile != tagDepthStart) break;
-		// No break
+		if (*toReturn || tagDepthFile != tagDepthStart)
+			break; // If depth has changed, this means we met a /> and must get out
+			       // No break
 
 	case BETWEEN_TAGS:
 		skipUntilChar('<');
@@ -926,7 +926,7 @@ cutFolderPathAndTryCreating:
 			char const* folderPathChars = folderPath.get();
 			char const* slashAddr = strrchr(folderPathChars, '/');
 			if (!slashAddr) return ERROR_UNSPECIFIED; // Shouldn't happen
-			int slashPos = (uint32_t)slashAddr - (uint32_t)folderPathChars;
+			int slashPos = (uintptr_t)slashAddr - (uintptr_t)folderPathChars;
 
 			error = folderPath.shorten(slashPos);
 			if (error) return error;

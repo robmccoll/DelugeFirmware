@@ -51,7 +51,7 @@ int FileItem::getFilenameWithoutExtension(String* filenameWithoutExtension) {
 		char const* chars = filenameWithoutExtension->get();
 		char const* dotAddress = strrchr(chars, '.');
 		if (dotAddress) {
-			int newLength = (uint32_t)dotAddress - (uint32_t)chars;
+			int newLength = (uintptr_t)dotAddress - (uintptr_t)chars;
 			int error = filenameWithoutExtension->shorten(newLength);
 			if (error) return error;
 		}
@@ -68,7 +68,7 @@ int FileItem::getDisplayNameWithoutExtension(String* displayNameWithoutExtension
 			char const* chars = displayNameWithoutExtension->get();
 			char const* dotAddress = strrchr(chars, '.');
 			if (dotAddress) {
-				int newLength = (uint32_t)dotAddress - (uint32_t)chars;
+				int newLength = (uintptr_t)dotAddress - (uintptr_t)chars;
 				error = displayNameWithoutExtension->shorten(newLength);
 				if (error) return error;
 			}

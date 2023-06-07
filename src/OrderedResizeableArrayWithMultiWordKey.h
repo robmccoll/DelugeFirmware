@@ -25,10 +25,10 @@
 class OrderedResizeableArrayWithMultiWordKey : public OrderedResizeableArrayWith32bitKey {
 public:
 	OrderedResizeableArrayWithMultiWordKey(int newElementSize = sizeof(uint32_t) * 2, int newNumWordsInKey = 2);
-	int searchMultiWord(uint32_t* __restrict__ keyWords, int comparison, int rangeBegin = 0, int rangeEnd = -1);
-	int searchMultiWordExact(uint32_t* __restrict__ keyWords, int* getIndexToInsertAt = NULL, int rangeBegin = 0);
-	int insertAtKeyMultiWord(uint32_t* __restrict__ keyWords, int rangeBegin = 0, int rangeEnd = -1);
-	bool deleteAtKeyMultiWord(uint32_t* __restrict__ keyWords);
+	int searchMultiWord(uintptr_t* __restrict__ keyWords, int comparison, int rangeBegin = 0, int rangeEnd = -1);
+	int searchMultiWordExact(uintptr_t* __restrict__ keyWords, int* getIndexToInsertAt = NULL, int rangeBegin = 0);
+	int insertAtKeyMultiWord(uintptr_t* __restrict__ keyWords, int rangeBegin = 0, int rangeEnd = -1);
+	bool deleteAtKeyMultiWord(uintptr_t* __restrict__ keyWords);
 
 	int numWordsInKey;
 };

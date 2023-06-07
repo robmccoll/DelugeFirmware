@@ -43,14 +43,14 @@ public:
 
 protected:
 	inline int32_t getKeyAtMemoryLocation(void* address) {
-		int32_t keyBig = *(uint32_t*)((uint32_t)address + keyOffset) << keyShiftAmount;
+		int32_t keyBig = *(uint32_t*)((uint8_t*)address + keyOffset) << keyShiftAmount;
 		return keyBig >> keyShiftAmount; // We use shifting instead of a mask so negative numbers get treated directly.
 	}
 
 	inline void setKeyAtMemoryLocation(int32_t key, void* address) {
-		uint32_t offsetAddress = (uint32_t)address + keyOffset;
+		uint32_t* offsetAddress = (uint32_t*)((uint8_t*)address + keyOffset);
 		uint32_t prevContents = *(uint32_t*)offsetAddress;
-		*(uint32_t*)offsetAddress = (key & keyMask) | (prevContents & ~keyMask);
+		*offsetAddress = (key & keyMask) | (prevContents & ~keyMask);
 	}
 
 private:
@@ -65,7 +65,7 @@ public:
 	OrderedResizeableArrayWith32bitKey(int newElementSize, int newMaxNumEmptySpacesToKeep = 16,
 	                                   int newNumExtraSpacesToAllocate = 15);
 	void shiftHorizontal(int32_t amount, int32_t effectiveLength);
-	void searchDual(int32_t const* __restrict__ searchTerms, int* __restrict__ resultingIndexes);
+	void searchDual(uintptr_t const* __restrict__ searchTerms, int* __restrict__ resultingIndexes);
 	void searchMultiple(int32_t* __restrict__ searchTerms, int numSearchTerms, int rangeEnd = -1);
 	bool generateRepeats(int32_t wrapPoint, int32_t endPos);
 	void testSearchMultiple();

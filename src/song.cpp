@@ -229,8 +229,9 @@ void Song::deleteAllBackedUpParamManagersWithClips() {
 keepSearchingForward:
 
 		// If still here, this is the first one with a Clip for this ModControllable. Find the end of this ModControllable's ones
-		int endIThisModControllable = backedUpParamManagers.search(
-		    (uint32_t)modControllable + 4, GREATER_OR_EQUAL, searchedUpToAndIncluding + 1); // Search just by first word
+		int endIThisModControllable =
+		    backedUpParamManagers.search((uintptr_t)modControllable + 4, GREATER_OR_EQUAL,
+		                                 searchedUpToAndIncluding + 1); // Search just by first word
 
 		// But if that next one, for the next ModControllable, also has a Clip, we can just keep looking forwards til we find one with no Clip
 		if (endIThisModControllable < backedUpParamManagers.getNumElements()) {
@@ -1136,7 +1137,7 @@ int Song::readFromFile() {
 			break;
 
 		// "xScr..."
-		case 'rcSx':
+		case 0x72635378:
 
 			switch (*(((uint32_t*)tagName) + 1)) {
 
@@ -1550,7 +1551,7 @@ traverseClips:
 			ClipInstance* thisInstance = thisOutput->clipInstances.getElement(i);
 
 			// Grab out the encoded Clip reference and turn it into an actual Clip*
-			uint32_t clipCode = (uint32_t)thisInstance->clip;
+			uint32_t clipCode = (uintptr_t)thisInstance->clip;
 
 			// Special case for NULL Clip
 			if (clipCode == 0xFFFFFFFF) {
@@ -2979,9 +2980,9 @@ traverseClips:
 ParamManager* Song::getBackedUpParamManagerForExactClip(ModControllableAudio* modControllable, Clip* clip,
                                                         ParamManager* stealInto) {
 
-	uint32_t keyWords[2];
-	keyWords[0] = (uint32_t)modControllable;
-	keyWords[1] = (uint32_t)clip;
+	uintptr_t keyWords[2];
+	keyWords[0] = (uintptr_t)modControllable;
+	keyWords[1] = (uintptr_t)clip;
 
 	int iCorrectClip = backedUpParamManagers.searchMultiWordExact(keyWords);
 
@@ -3009,7 +3010,7 @@ ParamManager* Song::getBackedUpParamManagerPreferablyWithClip(ModControllableAud
                                                               ParamManager* stealInto) {
 
 	int iAnyClip =
-	    backedUpParamManagers.search((uint32_t)modControllable, GREATER_OR_EQUAL); // Search just by first word
+	    backedUpParamManagers.search((uintptr_t)modControllable, GREATER_OR_EQUAL); // Search just by first word
 	if (iAnyClip >= backedUpParamManagers.getNumElements()) return NULL;
 	BackedUpParamManager* elementAnyClip = (BackedUpParamManager*)backedUpParamManagers.getElementAddress(iAnyClip);
 	if (elementAnyClip->modControllable != modControllable)
@@ -3024,9 +3025,9 @@ returnFirstForModControllableEvenIfNotRightClip:
 		elementCorrectClip = elementAnyClip;
 	}
 	else {
-		uint32_t keyWords[2];
-		keyWords[0] = (uint32_t)modControllable;
-		keyWords[1] = (uint32_t)clip;
+		uintptr_t keyWords[2];
+		keyWords[0] = (uintptr_t)modControllable;
+		keyWords[1] = (uintptr_t)clip;
 		iCorrectClip = backedUpParamManagers.searchMultiWordExact(keyWords, NULL, iAnyClip + 1);
 		if (iCorrectClip == -1) goto returnFirstForModControllableEvenIfNotRightClip;
 		elementCorrectClip = (BackedUpParamManager*)backedUpParamManagers.getElementAddress(iCorrectClip);
@@ -3051,9 +3052,9 @@ void Song::backUpParamManager(ModControllableAudio* modControllable, Clip* clip,
 
 	if (!paramManager->containsAnyMainParamCollections()) return;
 
-	uint32_t keyWords[2];
-	keyWords[0] = (uint32_t)modControllable;
-	keyWords[1] = (uint32_t)clip;
+	uintptr_t keyWords[2];
+	keyWords[0] = (uintptr_t)modControllable;
+	keyWords[1] = (uintptr_t)clip;
 
 	int indexToInsertAt;
 
@@ -3129,7 +3130,7 @@ void Song::deleteBackedUpParamManagersForClip(Clip* clip) {
 				backedUpParamManagers.deleteAtIndex(i);
 
 				// ...and then go find the first one that had this ModControllable
-				int j = backedUpParamManagers.search((uint32_t)modControllable, GREATER_OR_EQUAL, 0,
+				int j = backedUpParamManagers.search((uintptr_t)modControllable, GREATER_OR_EQUAL, 0,
 				                                     i); // Search by first word only
 				BackedUpParamManager* firstElementWithModControllable =
 				    (BackedUpParamManager*)backedUpParamManagers.getElementAddress(j);
@@ -3208,7 +3209,7 @@ void Song::deleteBackedUpParamManagersForClip(Clip* clip) {
 void Song::deleteBackedUpParamManagersForModControllable(ModControllableAudio* modControllable) {
 
 	int iAnyClip =
-	    backedUpParamManagers.search((uint32_t)modControllable, GREATER_OR_EQUAL); // Search by first word only
+	    backedUpParamManagers.search((uintptr_t)modControllable, GREATER_OR_EQUAL); // Search by first word only
 
 	while (true) {
 		if (iAnyClip >= backedUpParamManagers.getNumElements()) return;

@@ -193,12 +193,12 @@ void ResizeableArray::swapStateWith(ResizeableArray* other) {
 
 void ResizeableArray::attemptMemoryShorten() {
 	if (staticMemoryAllocationSize) return;
-	if ((uint32_t)memoryAllocationStart >= (uint32_t)INTERNAL_MEMORY_BEGIN) return;
+	if ((uintptr_t)memoryAllocationStart >= (uintptr_t)INTERNAL_MEMORY_BEGIN) return;
 
 	uint32_t allocatedSize = generalMemoryAllocator.getAllocatedSize(memoryAllocationStart);
 
 	if (allocatedSize > (memorySize + maxNumEmptySpacesToKeep) * elementSize) {
-		int extraSpaceLeft = (uint32_t)memory - (uint32_t)memoryAllocationStart;
+		int extraSpaceLeft = (uintptr_t)memory - (uintptr_t)memoryAllocationStart;
 
 		int extraSpaceRight = allocatedSize - extraSpaceLeft - memorySize * elementSize;
 
@@ -456,14 +456,14 @@ tryAgain:
 	uint32_t allocatedSize = generalMemoryAllocator.getAllocatedSize(memoryAllocationStart);
 
 	// Try expanding left into existing memory
-	uint32_t extraSpaceLeft = (uint32_t)memory - (uint32_t)memoryAllocationStart;
+	uint32_t extraSpaceLeft = (uintptr_t)memory - (uintptr_t)memoryAllocationStart;
 	uint32_t extraElementsLeft = extraSpaceLeft / elementSize;
 	memory = (char* __restrict__)memory - extraElementsLeft * elementSize;
 	memoryStart += extraElementsLeft;
 	memorySize += extraElementsLeft;
 
 	// Try expanding right into existing memory
-	extraSpaceLeft = (uint32_t)memory - (uint32_t)memoryAllocationStart; // Updates it
+	extraSpaceLeft = (uintptr_t)memory - (uintptr_t)memoryAllocationStart; // Updates it
 	memorySize = (uint32_t)(allocatedSize - extraSpaceLeft) / elementSize;
 
 	int memoryIncreasedBy = memorySize - oldMemorySize;
@@ -592,7 +592,7 @@ bool ResizeableArray::attemptMemoryExpansion(int minNumToExtend, int idealNumToE
 
 startAgain:
 	// If we actually had a bit more already, left...
-	uint32_t extraBytesLeft = (uint32_t)memory - (uint32_t)memoryAllocationStart;
+	uint32_t extraBytesLeft = (uintptr_t)memory - (uintptr_t)memoryAllocationStart;
 	if (extraBytesLeft >= elementSize) {
 		int extraElementsLeft =
 		    extraBytesLeft / elementSize; // See how many extra elements there are space for on the left
