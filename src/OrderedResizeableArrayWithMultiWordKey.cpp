@@ -25,17 +25,17 @@ OrderedResizeableArrayWithMultiWordKey::OrderedResizeableArrayWithMultiWordKey(i
 }
 
 
-int OrderedResizeableArrayWithMultiWordKey::searchMultiWord(uint32_t* __restrict__ keyWords, int comparison, int rangeBegin, int rangeEnd) {
+int OrderedResizeableArrayWithMultiWordKey::searchMultiWord(uintptr_t* __restrict__ keyWords, int comparison, int rangeBegin, int rangeEnd) {
 
 	if (rangeEnd == -1) rangeEnd = numElements;
 
-	const uint32_t* const finalKeyWord = keyWords + (numWordsInKey - 1);
+	const uintptr_t* const finalKeyWord = keyWords + (numWordsInKey - 1);
 
 	while (rangeBegin != rangeEnd) {
 		int proposedIndex = (rangeBegin + rangeEnd) >> 1;
 
 		uint32_t* __restrict__ wordsHere = (uint32_t*)getElementAddress(proposedIndex);
-		uint32_t* __restrict__ keyWord = keyWords;
+		uintptr_t* __restrict__ keyWord = keyWords;
 
 		while (true) {
 			int difference = *wordsHere - *keyWord;
@@ -59,7 +59,7 @@ searchFurtherRight:
 
 
 // Returns -1 if not found
-int OrderedResizeableArrayWithMultiWordKey::searchMultiWordExact(uint32_t* __restrict__ keyWords, int* getIndexToInsertAt, int rangeBegin) {
+int OrderedResizeableArrayWithMultiWordKey::searchMultiWordExact(uintptr_t* __restrict__ keyWords, int* getIndexToInsertAt, int rangeBegin) {
 	int i = searchMultiWord(keyWords, GREATER_OR_EQUAL, rangeBegin);
 	if (i < numElements) {
 		uint32_t* __restrict__ wordsHere = (uint32_t*)getElementAddress(i);
@@ -77,7 +77,7 @@ notFound:
 
 
 // Returns index created, or -1 if error
-int OrderedResizeableArrayWithMultiWordKey::insertAtKeyMultiWord(uint32_t* __restrict__ keyWords, int rangeBegin, int rangeEnd) {
+int OrderedResizeableArrayWithMultiWordKey::insertAtKeyMultiWord(uintptr_t* __restrict__ keyWords, int rangeBegin, int rangeEnd) {
 	int i = searchMultiWord(keyWords, GREATER_OR_EQUAL, 0, rangeEnd);
 
 	int error = insertAtIndex(i);
@@ -94,7 +94,7 @@ int OrderedResizeableArrayWithMultiWordKey::insertAtKeyMultiWord(uint32_t* __res
 
 
 // Returns whether it did actually do a delete
-bool OrderedResizeableArrayWithMultiWordKey::deleteAtKeyMultiWord(uint32_t* __restrict__ keyWords) {
+bool OrderedResizeableArrayWithMultiWordKey::deleteAtKeyMultiWord(uintptr_t* __restrict__ keyWords) {
 	int i = searchMultiWordExact(keyWords);
 	if (i != -1) {
 		deleteAtIndex(i);

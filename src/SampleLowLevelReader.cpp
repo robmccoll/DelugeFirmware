@@ -15,8 +15,10 @@
  * If not, see <https://www.gnu.org/licenses/>.
  */
 
+#ifdef __arm__
 #pragma GCC push_options
 #pragma GCC target ("fpu=neon")
+#endif
 
 #include "SampleLowLevelReader.h"
 #include "Sample.h"
@@ -56,7 +58,7 @@ void SampleLowLevelReader::unassignAllReasons() {
 // May return negative number - I think particularly if we're going in reversed and just cancelled reading from cache
 int32_t SampleLowLevelReader::getPlayByteLowLevel(Sample* sample, SamplePlaybackGuide* guide, bool compensateForInterpolationBuffer) {
 	if (clusters[0]) {
-		uint32_t withinCluster = (uint32_t)currentPlayPos - (uint32_t)&clusters[0]->data + 4 - sample->byteDepth; // Remove deliberate misalignment
+		uint32_t withinCluster = (uintptr_t)currentPlayPos - (uintptr_t)&clusters[0]->data + 4 - sample->byteDepth; // Remove deliberate misalignment
 
 		if (compensateForInterpolationBuffer && interpolationBufferSizeLastTime) {
 			int extraSamples = -(interpolationBufferSizeLastTime >> 1);
@@ -66,7 +68,7 @@ int32_t SampleLowLevelReader::getPlayByteLowLevel(Sample* sample, SamplePlayback
 		return (clusters[0]->clusterIndex << audioFileManager.clusterSizeMagnitude) + withinCluster;
 	}
 	else {
-		return (int32_t)guide->endPlaybackAtByte + (int32_t)(uint32_t)currentPlayPos * guide->playDirection; // Hopefully this won't go negative, cos we're returning as unsigned...
+		return (intptr_t)guide->endPlaybackAtByte + (intptr_t)currentPlayPos * guide->playDirection; // Hopefully this won't go negative, cos we're returning as unsigned...
 	}
 }
 
@@ -116,7 +118,7 @@ bool SampleLowLevelReader::reassessReassessmentLocation(SamplePlaybackGuide* gui
 		Cluster* finalCluster = sample->clusters.getElement(finalClusterIndex)->cluster;
 		if (!finalCluster) return false;
 
-		int32_t bytePosWithinCluster = (uint32_t)currentPlayPos - (uint32_t)clusters[0]->data;
+		int32_t bytePosWithinCluster = (uintptr_t)currentPlayPos - (uintptr_t)clusters[0]->data;
 		bytePosWithinCluster += (clusterIndex - finalClusterIndex) * audioFileManager.clusterSize;
 
 		currentPlayPos = finalCluster->data + bytePosWithinCluster;
@@ -306,7 +308,7 @@ bool SampleLowLevelReader::moveOnToNextCluster(SamplePlaybackGuide* guide, Sampl
 
 	int oldClusterIndex = clusters[0]->clusterIndex;
 
-	int bytePosWithinOldCluster = (uint32_t)currentPlayPos - (uint32_t)&clusters[0]->data;
+	int bytePosWithinOldCluster = (uintptr_t)currentPlayPos - (uintptr_t)&clusters[0]->data;
 	audioFileManager.removeReasonFromCluster(clusters[0], "E035");
 
 	for (int l = 0; l < NUM_CLUSTERS_LOADED_AHEAD - 1; l++) {
@@ -376,7 +378,7 @@ bool SampleLowLevelReader::changeClusterIfNecessary(SamplePlaybackGuide* guide, 
 #endif
 
 	while (true) {
-		int32_t byteOvershoot = (int32_t)((uint32_t)currentPlayPos - (uint32_t)reassessmentLocation) * guide->playDirection;
+		int32_t byteOvershoot = (int32_t)((uintptr_t)currentPlayPos - (uintptr_t)reassessmentLocation) * guide->playDirection;
 
 		if (byteOvershoot < 0) break;
 
@@ -431,7 +433,7 @@ justWriteZeros:
 
 			// Jump back 1 sample
 			thisPlayPos = thisPlayPos - playDirection * sample->numChannels * sample->byteDepth;
-			int bytesPastClusterStart = ((int)thisPlayPos - (int)clusterStartLocation) * playDirection;
+			int bytesPastClusterStart = ((intptr_t)thisPlayPos - (intptr_t)clusterStartLocation) * playDirection;
 
 			// If there was valid audio data there...
 			if (bytesPastClusterStart >= 0) {
@@ -458,7 +460,7 @@ doZeroesFillingBuffer:
 				interpolationBuffer[1][0][i] = 0;
 			}
 	    	currentPlayPos++;
-			if ((uint32_t)currentPlayPos >= interpolationBufferSize) return false;
+			if ((uintptr_t)currentPlayPos >= interpolationBufferSize) return false;
 		}
 
 		else {
@@ -487,7 +489,7 @@ void SampleLowLevelReader::jumpBackSamples(Sample* sample, int numToJumpBack, in
 
 		// Jump back 1 sample
 		char* newPlayPos = currentPlayPos - playDirection * sample->numChannels * sample->byteDepth;
-		int bytesPastClusterStart = ((int)newPlayPos - (int)clusterStartLocation) * playDirection;
+		int bytesPastClusterStart = ((intptr_t)newPlayPos - (intptr_t)clusterStartLocation) * playDirection;
 
 		// If there was no valid audio data there...
 		if (bytesPastClusterStart < 0) {
@@ -533,7 +535,7 @@ bool SampleLowLevelReader::considerUpcomingWindow(SamplePlaybackGuide* guide, Sa
 			if (!success) return false;
 
 			if (ALPHA_OR_BETA_VERSION && clusters[0]) {
-				int32_t bytesLeftWhichMayBeRead = (int32_t)((uint32_t)reassessmentLocation - (uint32_t)currentPlayPos) * guide->playDirection;
+				int32_t bytesLeftWhichMayBeRead = (int32_t)((uintptr_t)reassessmentLocation - (uintptr_t)currentPlayPos) * guide->playDirection;
 				if (bytesLeftWhichMayBeRead < 0) numericDriver.freezeWithError("E222");
 			}
 		}
@@ -545,7 +547,7 @@ bool SampleLowLevelReader::considerUpcomingWindow(SamplePlaybackGuide* guide, Sa
 			if (interpolationBufferSize < interpolationBufferSizeLastTime) {
 
 				if (ALPHA_OR_BETA_VERSION && clusters[0]) {
-					int32_t bytesLeftWhichMayBeRead = (int32_t)((uint32_t)reassessmentLocation - (uint32_t)currentPlayPos) * guide->playDirection;
+					int32_t bytesLeftWhichMayBeRead = (int32_t)((uintptr_t)reassessmentLocation - (uintptr_t)currentPlayPos) * guide->playDirection;
 					if (bytesLeftWhichMayBeRead < 0) numericDriver.freezeWithError("E305");
 				}
 
@@ -562,7 +564,7 @@ bool SampleLowLevelReader::considerUpcomingWindow(SamplePlaybackGuide* guide, Sa
 				jumpBackSamples(sample, offset, guide->playDirection);
 
 				if (ALPHA_OR_BETA_VERSION && clusters[0]) {
-					int32_t bytesLeftWhichMayBeRead = (int32_t)((uint32_t)reassessmentLocation - (uint32_t)currentPlayPos) * guide->playDirection;
+					int32_t bytesLeftWhichMayBeRead = (int32_t)((uintptr_t)reassessmentLocation - (uintptr_t)currentPlayPos) * guide->playDirection;
 					if (bytesLeftWhichMayBeRead < 0) numericDriver.freezeWithError("E306");
 				}
 			}
@@ -572,7 +574,7 @@ bool SampleLowLevelReader::considerUpcomingWindow(SamplePlaybackGuide* guide, Sa
 			else {
 
 				if (ALPHA_OR_BETA_VERSION && clusters[0]) {
-					int32_t bytesLeftWhichMayBeRead = (int32_t)((uint32_t)reassessmentLocation - (uint32_t)currentPlayPos) * guide->playDirection;
+					int32_t bytesLeftWhichMayBeRead = (int32_t)((uintptr_t)reassessmentLocation - (uintptr_t)currentPlayPos) * guide->playDirection;
 					if (bytesLeftWhichMayBeRead < 0) numericDriver.freezeWithError("E308");
 				}
 
@@ -599,7 +601,7 @@ bool SampleLowLevelReader::considerUpcomingWindow(SamplePlaybackGuide* guide, Sa
 				}
 
 				if (ALPHA_OR_BETA_VERSION && clusters[0]) {
-					int32_t bytesLeftWhichMayBeRead = (int32_t)((uint32_t)reassessmentLocation - (uint32_t)currentPlayPos) * guide->playDirection;
+					int32_t bytesLeftWhichMayBeRead = (int32_t)((uintptr_t)reassessmentLocation - (uintptr_t)currentPlayPos) * guide->playDirection;
 					if (bytesLeftWhichMayBeRead < 0) numericDriver.freezeWithError("E221");
 				}
 			}
@@ -629,7 +631,7 @@ bool SampleLowLevelReader::considerUpcomingWindow(SamplePlaybackGuide* guide, Sa
 				if (!clusters[0]) {
 doZeroes:
 					bufferZeroForInterpolation(sample->numChannels);
-					if (!allowEndlessSilenceAtEnd && (uint32_t)currentPlayPos >= interpolationBufferSize) return false;
+					if (!allowEndlessSilenceAtEnd && (uintptr_t)currentPlayPos >= interpolationBufferSize) return false;
 				}
 				else {
 
@@ -645,7 +647,7 @@ doZeroes:
 			    	if (ALPHA_OR_BETA_VERSION) {
 			    		if (!clusters[0]) numericDriver.freezeWithError("E225");
 
-						int32_t bytesLeftWhichMayBeRead = (int32_t)((uint32_t)reassessmentLocation - (uint32_t)currentPlayPos) * guide->playDirection;
+						int32_t bytesLeftWhichMayBeRead = (int32_t)((uintptr_t)reassessmentLocation - (uintptr_t)currentPlayPos) * guide->playDirection;
 						if (bytesLeftWhichMayBeRead <= 0) numericDriver.freezeWithError("E226");
 			    	}
 
@@ -656,7 +658,7 @@ doZeroes:
 			    	currentPlayPos += bytesPerSample * guide->playDirection;
 
 			    	if (ALPHA_OR_BETA_VERSION) {
-						int32_t bytesLeftWhichMayBeRead = (int32_t)((uint32_t)reassessmentLocation - (uint32_t)currentPlayPos) * guide->playDirection;
+						int32_t bytesLeftWhichMayBeRead = (int32_t)((uintptr_t)reassessmentLocation - (uintptr_t)currentPlayPos) * guide->playDirection;
 						if (bytesLeftWhichMayBeRead < 0) numericDriver.freezeWithError("E185");
 			    	}
 				}
@@ -668,7 +670,7 @@ doZeroes:
 			if (ALPHA_OR_BETA_VERSION && clusters[0]) {
 
 				// That should mean we've already read this one, so we definitely shouldn't be beyond the reassessmentLocation...
-				int32_t bytesLeftWhichMayBeRead = (int32_t)((uint32_t)reassessmentLocation - (uint32_t)currentPlayPos) * guide->playDirection;
+				int32_t bytesLeftWhichMayBeRead = (int32_t)((uintptr_t)reassessmentLocation - (uintptr_t)currentPlayPos) * guide->playDirection;
 				if (bytesLeftWhichMayBeRead < 0) numericDriver.freezeWithError("E223");
 			}
 		}
@@ -687,13 +689,13 @@ doZeroes:
 			// If finished waveform and just reading zeros
 			if (!clusters[0]) {
 				if (allowEndlessSilenceAtEnd) return true;
-				samplesLeftWhichMayBeRead = interpolationBufferSize - (uint32_t)currentPlayPos;
+				samplesLeftWhichMayBeRead = interpolationBufferSize - (uintptr_t)currentPlayPos;
 				shouldShorten = (samplesWeWantToReadThisWindow > samplesLeftWhichMayBeRead);
 			}
 
 			// Or if still going on waveform
 			else {
-				int32_t bytesLeftWhichMayBeRead = (int32_t)((uint32_t)reassessmentLocation - (uint32_t)currentPlayPos) * guide->playDirection;
+				int32_t bytesLeftWhichMayBeRead = (int32_t)((uintptr_t)reassessmentLocation - (uintptr_t)currentPlayPos) * guide->playDirection;
 				if (ALPHA_OR_BETA_VERSION && bytesLeftWhichMayBeRead < 0) numericDriver.freezeWithError("E148");
 
 				int bytesWeWantToRead = samplesWeWantToReadThisWindow * bytesPerSample;
@@ -744,7 +746,7 @@ doZeroes:
 		}
 
 		// If the end is coming in this window, deal with it
-		int32_t bytesLeftWhichMayBeRead = (int32_t)((uint32_t)reassessmentLocation - (uint32_t)currentPlayPos) * guide->playDirection;
+		int32_t bytesLeftWhichMayBeRead = (int32_t)((uintptr_t)reassessmentLocation - (uintptr_t)currentPlayPos) * guide->playDirection;
 
 		if (ALPHA_OR_BETA_VERSION && bytesLeftWhichMayBeRead <= 0) {
 			numericDriver.freezeWithError("E001");

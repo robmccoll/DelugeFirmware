@@ -2487,7 +2487,7 @@ int NoteRow::readFromFile(int* minY, InstrumentClip* parentClip, Song* song, int
         }
 
         else if (!strcmp(tagName, "drumIndex")) {
-            drum = (Drum*)storageManager.readTagOrAttributeValueInt(); // Sneaky - we store an integer in place of this pointer, then swap it back to something meaningful later
+            drum = (Drum*)(uintptr_t)storageManager.readTagOrAttributeValueInt(); // Sneaky - we store an integer in place of this pointer, then swap it back to something meaningful later
         }
 
         else if (!strcmp(tagName, "gateOutput")) {
@@ -2524,7 +2524,7 @@ int NoteRow::readFromFile(int* minY, InstrumentClip* parentClip, Song* song, int
         	// Sneaky sorta hack for 2016 files - allow more params to be loaded into a ParamManager that already had some loading done by the Drum
         	if (storageManager.firmwareVersionOfFileBeingRead == FIRMWARE_OLD && parentClip->output) {
 
-            	SoundDrum* actualDrum = (SoundDrum*)((Kit*)parentClip->output)->getDrumFromIndex((int)drum);
+            	SoundDrum* actualDrum = (SoundDrum*)((Kit*)parentClip->output)->getDrumFromIndex((uintptr_t)drum);
 
             	if (actualDrum) {
             		ParamManager* existingParamManager = song->getBackedUpParamManagerPreferablyWithClip(actualDrum, parentClip);
@@ -2610,7 +2610,7 @@ doReadNoteData:
 
         	{
 				char const* firstChars = storageManager.readNextCharsOfTagOrAttributeValue(2);
-				if (!firstChars || *(uint16_t*)firstChars != 'x0') goto getOut;
+				if (!firstChars || *(uint16_t*)firstChars != 0x7830 /*'x0'*/) goto getOut;
         	}
 
             while (true) {

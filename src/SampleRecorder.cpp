@@ -473,7 +473,7 @@ int SampleRecorder::finalizeRecordedFile() {
 	Uart::println("finalizing");
 
 	// In the very rare case where we've already got between 1 and 5 bytes overhanging the end of our current cluster, we need to allocate a new one right now
-	int bytesTilClusterEnd = (uint32_t)clusterEndPos - (uint32_t)writePos;
+	int bytesTilClusterEnd = (uintptr_t)clusterEndPos - (uintptr_t)writePos;
 	if (bytesTilClusterEnd < 0) {
 		int error = createNextCluster();
 
@@ -491,7 +491,7 @@ int SampleRecorder::finalizeRecordedFile() {
 	// And we probably need to write some of the final cluster(s) to file. (If it's NULL, it means that it couldn't be created, cos or RAM or file size limit.)
 	if (currentRecordCluster) {
 
-		int bytesToWrite = (uint32_t)writePos - (uint32_t)currentRecordCluster->data;
+		int bytesToWrite = (uintptr_t)writePos - (uintptr_t)currentRecordCluster->data;
 		if (bytesToWrite > 0) { // Will always be true
 			int error = writeCluster(currentRecordClusterIndex, bytesToWrite);
 			if (error) return error;
@@ -671,7 +671,7 @@ int SampleRecorder::createNextCluster() {
 	if (currentRecordClusterIndex >= (1 << (MAX_FILE_SIZE_MAGNITUDE - audioFileManager.clusterSizeMagnitude))) {
 
 		// See if we actually already had any bytes to write into that new cluster we can't have...
-		int bytesTilClusterEnd = (uint32_t)clusterEndPos - (uint32_t)writePos;
+		int bytesTilClusterEnd = (uintptr_t)clusterEndPos - (uintptr_t)writePos;
 		if (bytesTilClusterEnd < 0) {
 			numSamplesCaptured--;
 			writePos -= (int)recordingNumChannels * 3;
@@ -703,7 +703,7 @@ int SampleRecorder::createNextCluster() {
 	// Copy those extra bytes from the end of the old record cluster to the start of the new cluster
 	memcpy(currentRecordCluster->data, &oldRecordCluster->data[audioFileManager.clusterSize], 5); // 5 is the max number of bytes we could have overshot
 
-	int bytesOvershot = (uint32_t)writePos - (uint32_t)clusterEndPos;
+	int bytesOvershot = (uintptr_t)writePos - (uintptr_t)clusterEndPos;
 
 	currentRecordCluster->loaded = true; // I think this is ok - mark it as loaded even though we're yet to record into it
 
@@ -757,7 +757,7 @@ doFinishCapturing:
 			int bytesPerSample = recordingNumChannels * 3;
 			int bytesWeWantToWrite = numSamplesThisCycle * bytesPerSample;
 
-			int bytesTilClusterEnd = (uint32_t)clusterEndPos - (uint32_t)writePos;
+			int bytesTilClusterEnd = (uintptr_t)clusterEndPos - (uintptr_t)writePos;
 
 			// If we need a new cluster right now...
 			if (bytesTilClusterEnd <= 0) {
@@ -771,7 +771,7 @@ doFinishCapturing:
 					return;
 				}
 
-				bytesTilClusterEnd = (uint32_t)clusterEndPos - (uint32_t)writePos; // Recalculate it
+				bytesTilClusterEnd = (uintptr_t)clusterEndPos - (uintptr_t)writePos; // Recalculate it
 			}
 
 			if (bytesTilClusterEnd <= bytesWeWantToWrite - bytesPerSample) {
@@ -1056,7 +1056,7 @@ int SampleRecorder::alterFile(int action, int lshiftAmount, uint32_t idealFileSi
 
 
 		// If need to advance write-head past the end of a cluster, then we'll write that current cluster to disk and carry on
-		int writeOvershot = (uint32_t)writePos - (uint32_t)&currentWriteCluster->data[audioFileManager.clusterSize];
+		int writeOvershot = (uintptr_t)writePos - (uintptr_t)&currentWriteCluster->data[audioFileManager.clusterSize];
 		if (writeOvershot >= 0) {
 
 			// If reached very end of file, break
@@ -1149,7 +1149,7 @@ writeFailed:
 
 			Uart::println("read advance");
 
-			int overshot = (uint32_t)readPos - (uint32_t)&currentReadCluster->data[audioFileManager.clusterSize];
+			int overshot = (uintptr_t)readPos - (uintptr_t)&currentReadCluster->data[audioFileManager.clusterSize];
 
 			// Some bug-hunting
 			if (!currentReadCluster->numReasonsHeldBySampleRecorder) numericDriver.freezeWithError("E354");
@@ -1204,7 +1204,7 @@ writeFailed:
 
 	currentWriteCluster->loaded = true;
 
-	unsigned int bytesToWriteFinalCluster = (uint32_t)writePos - (uint32_t)currentWriteCluster->data;
+	unsigned int bytesToWriteFinalCluster = (uintptr_t)writePos - (uintptr_t)currentWriteCluster->data;
 
 	if (bytesToWriteFinalCluster) { // If there is in fact anything to flush out to the file / card...
 

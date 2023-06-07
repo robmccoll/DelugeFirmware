@@ -262,9 +262,9 @@ gotError:
 							|| !memcasecmp(normalFilePath, "SAMPLES/CLIPS/REC", 17)
 							) {
 						char const* slashAddr = strrchr(normalFilePath, '/');
-						int slashPos = (uint32_t)slashAddr - (uint32_t)normalFilePath;
+						uintptr_t slashPos = (uintptr_t)slashAddr - (uintptr_t)normalFilePath;
 
-						int fileNamePos = slashPos + 1;
+						uintptr_t fileNamePos = slashPos + 1;
 
 						if (audioFile->filePath.getLength() - fileNamePos == 12 && !strcasecmp(normalFilePath + fileNamePos + 8, ".WAV")) {
 

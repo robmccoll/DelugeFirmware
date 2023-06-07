@@ -136,8 +136,8 @@ bool renderInStereo = true;
 bool bypassCulling = false;
 bool audioRoutineLocked = false;
 uint32_t audioSampleTimer = 0;
-uint32_t i2sTXBufferPos;
-uint32_t i2sRXBufferPos;
+uintptr_t i2sTXBufferPos;
+uintptr_t i2sRXBufferPos;
 
 bool headphonesPluggedIn;
 bool micPluggedIn;
@@ -171,7 +171,7 @@ int32_t masterVolumeAdjustmentR;
 bool doMonitoring;
 int monitoringAction;
 
-uint32_t saddr;
+uintptr_t saddr;
 
 
 VoiceSample voiceSamples[NUM_VOICE_SAMPLES_STATIC];
@@ -227,10 +227,10 @@ void init() {
     	staticVoices[i].nextUnassigned = (i == NUM_VOICES_STATIC - 1) ? NULL : &staticVoices[i + 1];
     }
 
-    i2sTXBufferPos = (uint32_t)getTxBufferStart();
+    i2sTXBufferPos = (uintptr_t)getTxBufferStart();
 
 #if DELUGE_MODEL != DELUGE_MODEL_40_PAD
-    i2sRXBufferPos = (uint32_t)getRxBufferStart() + ((SSI_RX_BUFFER_NUM_SAMPLES - SSI_TX_BUFFER_NUM_SAMPLES - 16) << (2 + NUM_MONO_INPUT_CHANNELS_MAGNITUDE)); // Subtracting 5 or more seems fine
+    i2sRXBufferPos = (uintptr_t)getRxBufferStart() + ((SSI_RX_BUFFER_NUM_SAMPLES - SSI_TX_BUFFER_NUM_SAMPLES - 16) << (2 + NUM_MONO_INPUT_CHANNELS_MAGNITUDE)); // Subtracting 5 or more seems fine
 #endif
 }
 
@@ -380,9 +380,9 @@ void routine() {
 
 	generalMemoryAllocator.checkStack("AudioDriver::routine");
 
-    saddr = (uint32_t)(getTxBufferCurrentPlace());
-    uint32_t saddrPosAtStart = saddr >> (2 + NUM_MONO_OUTPUT_CHANNELS_MAGNITUDE);
-    int numSamples = ((uint32_t)(saddr - i2sTXBufferPos) >> (2 + NUM_MONO_OUTPUT_CHANNELS_MAGNITUDE)) & (SSI_TX_BUFFER_NUM_SAMPLES - 1);
+    saddr = (uintptr_t)(getTxBufferCurrentPlace());
+    uintptr_t saddrPosAtStart = saddr >> (2 + NUM_MONO_OUTPUT_CHANNELS_MAGNITUDE);
+    int numSamples = ((uintptr_t)(saddr - i2sTXBufferPos) >> (2 + NUM_MONO_OUTPUT_CHANNELS_MAGNITUDE)) & (SSI_TX_BUFFER_NUM_SAMPLES - 1);
     if (!numSamples) {
     	audioRoutineLocked = false;
     	return;
@@ -801,9 +801,9 @@ startAgain:
     		timeWithinWindowAtWhichMIDIOrGateOccurs = 0;
     	}
 
-		uint32_t saddrAtEnd = (uint32_t)(getTxBufferCurrentPlace());
-		uint32_t saddrPosAtEnd = saddrAtEnd >> (2 + NUM_MONO_OUTPUT_CHANNELS_MAGNITUDE);
-		uint32_t saddrMovementSinceStart = saddrPosAtEnd - saddrPosAtStart; // You'll need to &(SSI_TX_BUFFER_NUM_SAMPLES - 1) this anytime it's used
+		uintptr_t saddrAtEnd = (uintptr_t)(getTxBufferCurrentPlace());
+		uintptr_t saddrPosAtEnd = saddrAtEnd >> (2 + NUM_MONO_OUTPUT_CHANNELS_MAGNITUDE);
+		uintptr_t saddrMovementSinceStart = saddrPosAtEnd - saddrPosAtStart; // You'll need to &(SSI_TX_BUFFER_NUM_SAMPLES - 1) this anytime it's used
 
 		int32_t samplesTilMIDIOrGate = (timeWithinWindowAtWhichMIDIOrGateOccurs - saddrMovementSinceStart - unadjustedNumSamplesBeforeLappingPlayHead)
 				& (SSI_TX_BUFFER_NUM_SAMPLES - 1);
@@ -863,7 +863,7 @@ startAgain:
 
 
 int getNumSamplesLeftToOutputFromPreviousRender() {
-	return ((uint32_t)renderingBufferOutputEnd - (uint32_t)renderingBufferOutputPos) >> 3;
+	return ((uintptr_t)renderingBufferOutputEnd - (uintptr_t)renderingBufferOutputPos) >> 3;
 }
 
 
@@ -882,13 +882,13 @@ bool doSomeOutputting() {
     while (renderingBufferOutputPosNow != renderingBufferOutputEnd) {
 
     	// If we've reached the end of the known space in the output buffer...
-		if (!(((uint32_t)((uint32_t)i2sTXBufferPosNow - saddr) >> (2 + NUM_MONO_OUTPUT_CHANNELS_MAGNITUDE)) & (SSI_TX_BUFFER_NUM_SAMPLES - 1))) {
+		if (!(((uintptr_t)((uintptr_t)i2sTXBufferPosNow - saddr) >> (2 + NUM_MONO_OUTPUT_CHANNELS_MAGNITUDE)) & (SSI_TX_BUFFER_NUM_SAMPLES - 1))) {
 
 			// See if there's now some more space.
-    		saddr = (uint32_t)getTxBufferCurrentPlace();
+    		saddr = (uintptr_t)getTxBufferCurrentPlace();
 
     		// If there wasn't, stop for now
-    		if (!(((uint32_t)((uint32_t)i2sTXBufferPosNow - saddr) >> (2 + NUM_MONO_OUTPUT_CHANNELS_MAGNITUDE)) & (SSI_TX_BUFFER_NUM_SAMPLES - 1))) break;
+    		if (!(((uintptr_t)((uintptr_t)i2sTXBufferPosNow - saddr) >> (2 + NUM_MONO_OUTPUT_CHANNELS_MAGNITUDE)) & (SSI_TX_BUFFER_NUM_SAMPLES - 1))) break;
     	}
 
 		// Here we're going to do something equivalent to a multiply_32x32_rshift32(), but add dithering.
@@ -968,14 +968,14 @@ bool doSomeOutputting() {
     }
 
     renderingBufferOutputPos = renderingBufferOutputPosNow; // Write back from __restrict__ pointer to permanent pointer
-    i2sTXBufferPos = (uint32_t)i2sTXBufferPosNow;
+    i2sTXBufferPos = (uintptr_t)i2sTXBufferPosNow;
 
 
     if (numSamplesOutputted) {
 
 #if DELUGE_MODEL != DELUGE_MODEL_40_PAD
 		i2sRXBufferPos += (numSamplesOutputted << (NUM_MONO_INPUT_CHANNELS_MAGNITUDE + 2));
-		if (i2sRXBufferPos >= (uint32_t)getRxBufferEnd()) i2sRXBufferPos -= (SSI_RX_BUFFER_NUM_SAMPLES << (NUM_MONO_INPUT_CHANNELS_MAGNITUDE + 2));
+		if (i2sRXBufferPos >= (uintptr_t)getRxBufferEnd()) i2sRXBufferPos -= (SSI_RX_BUFFER_NUM_SAMPLES << (NUM_MONO_INPUT_CHANNELS_MAGNITUDE + 2));
 #endif
 
 		// Go through each SampleRecorder, feeding them audio
@@ -994,10 +994,10 @@ bool doSomeOutputting() {
 
 				// We'll feed a bunch of samples to the SampleRecorder - normally all of what we just advanced, but if the buffer wrapped around,
 				// we'll just go to the end of the buffer, and not worry about the extra bit at the start - that'll get done next time.
-				uint32_t stopPos = (i2sRXBufferPos < (uint32_t)recorder->sourcePos) ? (uint32_t)getRxBufferEnd() : i2sRXBufferPos;
+				uintptr_t stopPos = (i2sRXBufferPos < (uintptr_t)recorder->sourcePos) ? (uintptr_t)getRxBufferEnd() : i2sRXBufferPos;
 
 				int32_t* streamToRecord = recorder->sourcePos;
-				int numSamplesFeedingNow = (stopPos - (uint32_t)recorder->sourcePos) >> (2 + NUM_MONO_INPUT_CHANNELS_MAGNITUDE);
+				int numSamplesFeedingNow = (stopPos - (uintptr_t)recorder->sourcePos) >> (2 + NUM_MONO_INPUT_CHANNELS_MAGNITUDE);
 
 				// We also enforce a firm limit on how much to feed, to keep things sane. Any remaining will get done next time.
 				numSamplesFeedingNow = getMin(numSamplesFeedingNow, 256);
@@ -1172,9 +1172,9 @@ doCull:
 
     newVoice->assignedToSound = forSound;
 
-	uint32_t keyWords[2];
-	keyWords[0] = (uint32_t)forSound;
-	keyWords[1] = (uint32_t)newVoice;
+	uintptr_t keyWords[2];
+	keyWords[0] = (uintptr_t)forSound;
+	keyWords[1] = (uintptr_t)newVoice;
 
     int i = activeVoices.insertAtKeyMultiWord(keyWords);
     if (i == -1) {
@@ -1194,9 +1194,9 @@ void unassignVoice(Voice* voice, Sound* sound, ModelStackWithSoundFlags* modelSt
 
 	voice->setAsUnassigned(modelStack->addVoice(voice));
 	if (removeFromVector) {
-		uint32_t keyWords[2];
-		keyWords[0] = (uint32_t)sound;
-		keyWords[1] = (uint32_t)voice;
+		uintptr_t keyWords[2];
+		keyWords[0] = (uintptr_t)sound;
+		keyWords[1] = (uintptr_t)voice;
 		activeVoices.deleteAtKeyMultiWord(keyWords);
 	}
 
@@ -1327,12 +1327,12 @@ void slowRoutine() {
 	// That would cause the RX buffer's latency to increase. So here, we check for that and correct it.
 	// The correct latency for the RX buffer is between (SSI_TX_BUFFER_NUM_SAMPLES) and (2 * SSI_TX_BUFFER_NUM_SAMPLES).
 
-	uint32_t rxBufferWriteAddr = (uint32_t)getRxBufferCurrentPlace();
-	uint32_t latencyWithinAppropriateWindow = (((rxBufferWriteAddr - (uint32_t)i2sRXBufferPos) >> (2 + NUM_MONO_INPUT_CHANNELS_MAGNITUDE)) - SSI_TX_BUFFER_NUM_SAMPLES) & (SSI_RX_BUFFER_NUM_SAMPLES - 1);
+	uintptr_t rxBufferWriteAddr = (uintptr_t)getRxBufferCurrentPlace();
+	uintptr_t latencyWithinAppropriateWindow = (((rxBufferWriteAddr - (uintptr_t)i2sRXBufferPos) >> (2 + NUM_MONO_INPUT_CHANNELS_MAGNITUDE)) - SSI_TX_BUFFER_NUM_SAMPLES) & (SSI_RX_BUFFER_NUM_SAMPLES - 1);
 
 	if (latencyWithinAppropriateWindow >= SSI_TX_BUFFER_NUM_SAMPLES) {
 		i2sRXBufferPos += (SSI_TX_BUFFER_NUM_SAMPLES << (2 + NUM_MONO_INPUT_CHANNELS_MAGNITUDE));
-		if (i2sRXBufferPos >= (uint32_t)getRxBufferEnd()) i2sRXBufferPos -= (SSI_RX_BUFFER_NUM_SAMPLES << (2 + NUM_MONO_INPUT_CHANNELS_MAGNITUDE));
+		if (i2sRXBufferPos >= (uintptr_t)getRxBufferEnd()) i2sRXBufferPos -= (SSI_RX_BUFFER_NUM_SAMPLES << (2 + NUM_MONO_INPUT_CHANNELS_MAGNITUDE));
 	}
 
 

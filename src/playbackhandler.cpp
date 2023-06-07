@@ -1628,7 +1628,7 @@ void PlaybackHandler::displaySwingAmount() {
 
 #else
 	char buffer[12];
-	char* toDisplay;
+	const char* toDisplay;
 	if (currentSong->swingAmount == 0) toDisplay = "OFF";
 	else {
 		intToString(currentSong->swingAmount + 50, buffer);

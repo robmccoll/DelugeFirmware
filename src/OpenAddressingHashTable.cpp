@@ -73,11 +73,11 @@ int OpenAddressingHashTable::getBucketIndex(uint32_t key) {
 }
 
 void* OpenAddressingHashTable::getBucketAddress(int b) {
-	return (void*)((uint32_t)memory + b * elementSize);
+	return (void*)((uintptr_t)memory + b * elementSize);
 }
 
 void* OpenAddressingHashTable::secondaryMemoryGetBucketAddress(int b) {
-	return (void*)((uint32_t)secondaryMemory + b * elementSize);
+	return (void*)((uintptr_t)secondaryMemory + b * elementSize);
 }
 
 

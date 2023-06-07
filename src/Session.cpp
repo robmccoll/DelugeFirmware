@@ -209,7 +209,7 @@ void Session::doLaunch() {
 			Output* output = clip->output;
 
 			bool alreadyLaunchedFor = false;
-			outputsLaunchedFor.insert((uint32_t)output, &alreadyLaunchedFor);
+			outputsLaunchedFor.insert((uintptr_t)output, &alreadyLaunchedFor);
 
 			// If already seen another Clip to launch with same Output...
 			if (alreadyLaunchedFor) {
@@ -365,7 +365,7 @@ probablyJustKeepGoing:
 				}
 
 				// If some other Clip is launching for this Output, we gotta stop
-				if (outputsLaunchedFor.lookup((uint32_t)output)) {
+				if (outputsLaunchedFor.lookup((uintptr_t)output)) {
 
 					// If we're linearly recording, we want to stop that as well as ceasing to be active
 					if (!stoppedLinearRecording && clip->getCurrentlyRecordingLinearly()) {
@@ -1335,7 +1335,7 @@ void Session::armClipsToStartOrSoloWithQuantization(uint32_t pos, uint32_t quant
 				Output* output = thisClip->output;
 
 				bool alreadyPickedAClip = false;
-				outputsWeHavePickedAClipFor.insert((uint32_t)output, &alreadyPickedAClip);
+				outputsWeHavePickedAClipFor.insert((uintptr_t)output, &alreadyPickedAClip);
 
 				// If we've already picked a Clip for this same Output...
 				if (alreadyPickedAClip) {
@@ -1422,7 +1422,7 @@ weWantThisClipInactive:
         			if (thisClip->activeIfNoSolo) {
 
 						// If we've already picked a Clip for this same Output, we definitely don't want this one remaining active, so arm it to stop
-						if (outputsWeHavePickedAClipFor.lookup((uint32_t)thisClip->output)) {
+						if (outputsWeHavePickedAClipFor.lookup((uintptr_t)thisClip->output)) {
 							thisClip->armState = ARM_STATE_ON_NORMAL;
 						}
         			}

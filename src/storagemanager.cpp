@@ -956,7 +956,7 @@ cutFolderPathAndTryCreating:
     		char const* folderPathChars = folderPath.get();
     		char const* slashAddr = strrchr(folderPathChars, '/');
     		if (!slashAddr) return ERROR_UNSPECIFIED; // Shouldn't happen
-    		int slashPos = (uint32_t)slashAddr - (uint32_t)folderPathChars;
+    		int slashPos = (uintptr_t)slashAddr - (uintptr_t)folderPathChars;
 
     		error = folderPath.shorten(slashPos);
     		if (error) return error;

@@ -24,12 +24,12 @@
 #include "WaveTableReader.h"
 #include "FFTConfigManager.h"
 #include "NE10.h"
-#include "arm_neon.h"
 #include "numericdriver.h"
 #include <new>
 #include "mtu.h"
 #include "renderWave.h"
 #include "AudioEngine.h"
+#include "arm_neon.h"
 
 extern "C" {
 #include "uart_all_cpus.h"
@@ -431,7 +431,7 @@ gotError5:
 			// Stop before we get to the final sample that overlaps the end of the cluster, if that happens.
 			sourceStopAt = sourceStopAt - byteDepth + 1;
 
-			int numSourceBytesLookingAtThisCluster = (uint32_t)sourceStopAt - (uint32_t)source;
+			int numSourceBytesLookingAtThisCluster = (uintptr_t)sourceStopAt - (uintptr_t)source;
 			if (numSourceBytesLookingAtThisCluster > sourceBytesLeftToCopyThisCycle) sourceStopAt = source + sourceBytesLeftToCopyThisCycle;
 
 			const int16_t* const bandDestinationStartedAt = initialBandWritePos;
@@ -451,7 +451,7 @@ gotError5:
 			}
 
 
-			int bytesJustWritten = (uint32_t)initialBandWritePos - (uint32_t)bandDestinationStartedAt;
+			int bytesJustWritten = (uintptr_t)initialBandWritePos - (uintptr_t)bandDestinationStartedAt;
 			int samplesJustCopied = bytesJustWritten >> 1;
 			int sourceBytesJustRead = samplesJustCopied * byteDepth;
 			sourceBytesLeftToCopyThisCycle -= sourceBytesJustRead;
@@ -717,7 +717,7 @@ transformBandToTimeDomain:
 			if (band->fromCycleNumber) {
 				uint32_t idealAmountToShorten = band->fromCycleNumber * (band->cycleSizeNoDuplicates + WAVETABLE_NUM_DUPLICATE_SAMPLES_AT_END_OF_CYCLE) * sizeof(int16_t);
 				uint32_t amountShortened = generalMemoryAllocator.shortenLeft(band->data, idealAmountToShorten, sizeof(WaveTableBandData)); // Tell it to move the WaveTableBandData "header" forward
-				band->data = (WaveTableBandData*)((uint32_t)band->data + amountShortened);
+				band->data = (WaveTableBandData*)((uintptr_t)band->data + amountShortened);
 			}
 		}
 	}
@@ -765,7 +765,7 @@ void WaveTable::doRenderingLoopSingleCycle(int32_t* __restrict__ thisSample, int
 
 		int windowedSincTableLineOffsetBytes = ((uint32_t)-phase) >> (32 + INTERPOLATION_MAX_NUM_SAMPLES_MAGNITUDE - numBitsInWindowedSyncTableSize - 5 - bandCycleSizeMagnitude); // The -5 is for 32 bytes (16 samples) per line in the windowed sinc table.
 		windowedSincTableLineOffsetBytes &= 0b111100000;
-		int16_t const* __restrict__ sincKernelReadPos = (int16_t const*)((uint32_t)&kernel[0] + windowedSincTableLineOffsetBytes);
+		int16_t const* __restrict__ sincKernelReadPos = (int16_t const*)((uintptr_t)&kernel[0] + windowedSincTableLineOffsetBytes);
 
 		int16x8_t kernelVector[INTERPOLATION_MAX_NUM_SAMPLES >> 3];
 
@@ -862,7 +862,7 @@ void WaveTable::doRenderingLoop(int32_t* __restrict__ thisSample, int32_t const*
 
 		int windowedSincTableLineOffsetBytes = ((uint32_t)-phase) >> (32 + INTERPOLATION_MAX_NUM_SAMPLES_MAGNITUDE - numBitsInWindowedSyncTableSize - 5 - bandCycleSizeMagnitude); // The -5 is for 32 bytes (16 samples) per line in the windowed sinc table.
 		windowedSincTableLineOffsetBytes &= 0b111100000;
-		int16_t const* __restrict__ sincKernelReadPos = (int16_t const*)((uint32_t)&kernel[0] + windowedSincTableLineOffsetBytes);
+		int16_t const* __restrict__ sincKernelReadPos = (int16_t const*)((uintptr_t)&kernel[0] + windowedSincTableLineOffsetBytes);
 
 		int16x8_t kernelVector[INTERPOLATION_MAX_NUM_SAMPLES >> 3];
 

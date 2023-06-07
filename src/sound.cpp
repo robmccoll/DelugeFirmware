@@ -2191,7 +2191,7 @@ bool Sound::learnKnob(MIDIDevice* fromDevice, ParamDescriptor paramDescriptor, u
 void Sound::ensureInaccessibleParamPresetValuesWithoutKnobsAreZero(Song* song) {
 
 	// We gotta do this for any backedUpParamManagers too!
-	int i = song->backedUpParamManagers.search((uint32_t)(ModControllableAudio*)this, GREATER_OR_EQUAL); // Search by first word only.
+	int i = song->backedUpParamManagers.search((uintptr_t)(ModControllableAudio*)this, GREATER_OR_EQUAL); // Search by first word only.
 
 	while (true) {
 		if (i >= song->backedUpParamManagers.getNumElements()) break;

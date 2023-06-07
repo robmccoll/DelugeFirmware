@@ -81,6 +81,8 @@ typedef unsigned long long  uint64_t;
 typedef float               float32_t;
 typedef double              float64_t;
 typedef long double         float128_t;
+typedef uint32_t            uintptr_t;
+typedef iint32_t            intptr_t;
 
 /* R_TYPEDEFS_H */
 #endif

@@ -3251,14 +3251,14 @@ int InstrumentClip::claimOutput(ModelStackWithTimelineCounter* modelStack) {
     		bool paramManagerCloned = false;
 
         	// Maybe we (cryptically) marked it as "no drum".
-        	if ((uint32_t)thisNoteRow->drum == (uint32_t)0xFFFFFFFF) {
+        	if ((uintptr_t)thisNoteRow->drum == (uintptr_t)0xFFFFFFFF) {
         		thisNoteRow->drum = NULL;
         	}
 
         	// Or a gate drum from a pre-V2.0 Song file...
-        	else if ((uint32_t)thisNoteRow->drum > (uint32_t)(0xFFFFFFFE - NUM_GATE_CHANNELS)) {
+        	else if ((uintptr_t)thisNoteRow->drum > (uintptr_t)(0xFFFFFFFE - NUM_GATE_CHANNELS)) {
 
-        		int gateChannel = 0xFFFFFFFE - (uint32_t)thisNoteRow->drum;
+        		int gateChannel = 0xFFFFFFFE - (uintptr_t)thisNoteRow->drum;
 
         		thisNoteRow->drum = kit->getGateDrumForChannel(gateChannel);
 
@@ -3278,7 +3278,7 @@ int InstrumentClip::claimOutput(ModelStackWithTimelineCounter* modelStack) {
         	else {
 
         		// Don't call setDrum(), because that would overwrite the NoteRow's paramManager. It already has the right one, loaded from file
-        		Drum* drumFromIndex = kit->getDrumFromIndex((uint32_t)thisNoteRow->drum);
+        		Drum* drumFromIndex = kit->getDrumFromIndex((uintptr_t)thisNoteRow->drum);
 
         		ParamManagerForTimeline* otherParamManager;
 

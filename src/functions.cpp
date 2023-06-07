@@ -1204,7 +1204,7 @@ void getThingFilename(char const* thingName, int16_t currentSlot, int8_t current
 
 
 bool isAudioFilename(char const* filename) {
-	char* dotPos = strrchr(filename, '.');
+	const char* dotPos = strrchr(filename, '.');
 	return (dotPos != 0 && (
 			!strcasecmp(dotPos, ".WAV")
 			|| !strcasecmp(dotPos, ".AIF")
@@ -1213,7 +1213,7 @@ bool isAudioFilename(char const* filename) {
 }
 
 bool isAiffFilename(char const* filename) {
-	char* dotPos = strrchr(filename, '.');
+	const char* dotPos = strrchr(filename, '.');
 	return (dotPos != 0 && (
 			!strcasecmp(dotPos, ".AIF")
 			|| !strcasecmp(dotPos, ".AIFF")
@@ -2213,10 +2213,10 @@ bool doesFilenameFitPrefixFormat(char const* fileName, char const* filePrefix, i
 
 	if (memcasecmp(fileName, filePrefix, prefixLength)) return false;
 
-	char* dotAddress = strrchr(fileName, '.');
+	const char* dotAddress = strrchr(fileName, '.');
 	if (!dotAddress) return false;
 
-	int dotPos = (uint32_t)dotAddress - (uint32_t)fileName;
+	uintptr_t dotPos = (uintptr_t)dotAddress - (uintptr_t)fileName;
 	if (dotPos < prefixLength + 3) return false;
 
 	if (!memIsNumericChars(&fileName[prefixLength], 3)) return false;

@@ -31,7 +31,7 @@ QuickSorter::QuickSorter(int newElementSize, int keyNumBits, void* newMemory) :
 }
 
 void* QuickSorter::getElementAddress(int i) {
-	return (void*)((uint32_t)memory + i * elementSize);
+	return (void*)((uintptr_t)memory + i * elementSize);
 }
 
 // A utility function to swap two elements

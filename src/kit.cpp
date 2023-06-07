@@ -387,7 +387,7 @@ void Kit::drumRemoved(Drum* drum) {
 	if (selectedDrum == drum) selectedDrum = NULL;
 
 #if ALPHA_OR_BETA_VERSION
-	int i = drumsWithRenderingActive.searchExact((int32_t)drum);
+	int i = drumsWithRenderingActive.searchExact((uintptr_t)drum);
 	if (i != -1) {
 		numericDriver.freezeWithError("E321");
 	}

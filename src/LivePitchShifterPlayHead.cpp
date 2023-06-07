@@ -21,8 +21,10 @@
 #include "LiveInputBuffer.h"
 
 
+#ifdef __arm__
 #pragma GCC push_options
 #pragma GCC target ("fpu=neon")
+#endif
 
 #include "arm_neon.h"
 

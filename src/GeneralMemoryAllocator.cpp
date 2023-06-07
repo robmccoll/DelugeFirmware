@@ -41,7 +41,7 @@ GeneralMemoryAllocator::GeneralMemoryAllocator()
 {
 	lock = false;
 	regions[MEMORY_REGION_SDRAM].setup(emptySpacesMemory, sizeof(emptySpacesMemory), EXTERNAL_MEMORY_BEGIN, EXTERNAL_MEMORY_END);
-	regions[MEMORY_REGION_INTERNAL].setup(emptySpacesMemoryInternal, sizeof(emptySpacesMemoryInternal), (uint32_t)&__heap_start, INTERNAL_MEMORY_END - 8192);
+	regions[MEMORY_REGION_INTERNAL].setup(emptySpacesMemoryInternal, sizeof(emptySpacesMemoryInternal), (uintptr_t)&__heap_start, INTERNAL_MEMORY_END - 8192);
 
 #if ALPHA_OR_BETA_VERSION
 	regions[MEMORY_REGION_SDRAM].name = "external";
@@ -59,7 +59,7 @@ void GeneralMemoryAllocator::checkStack(char const* caller) {
 
 	char a;
 
-	int distance = (int)&a - (INTERNAL_MEMORY_END - PROGRAM_STACK_MAX_SIZE);
+	int distance = (uintptr_t)&a - (INTERNAL_MEMORY_END - PROGRAM_STACK_MAX_SIZE);
 	if (distance < closestDistance) {
 		closestDistance = distance;
 
@@ -134,12 +134,12 @@ void* GeneralMemoryAllocator::alloc(uint32_t requiredSize, uint32_t* getAllocate
 
 
 uint32_t GeneralMemoryAllocator::getAllocatedSize(void* address) {
-	uint32_t* header = (uint32_t*)((uint32_t)address - 4);
+	uint32_t* header = (uint32_t*)((uintptr_t)address - 4);
 	return (*header & SPACE_SIZE_MASK);
 }
 
 int GeneralMemoryAllocator::getRegion(void* address) {
-	return ((uint32_t)address >= (uint32_t)INTERNAL_MEMORY_BEGIN) ? MEMORY_REGION_INTERNAL : MEMORY_REGION_SDRAM;
+	return ((uintptr_t)address >= (uintptr_t)INTERNAL_MEMORY_BEGIN) ? MEMORY_REGION_INTERNAL : MEMORY_REGION_SDRAM;
 }
 
 // Returns new size

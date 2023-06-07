@@ -296,10 +296,10 @@ extensionNotSupported:
 		if (filePrefixHere) {
 			if (memcasecmp(storedFilenameChars, filePrefixHere, filePrefixLength)) goto nonNumericFile;
 
-			char* dotAddress = strrchr(storedFilenameChars, '.');
+			const char* dotAddress = strrchr(storedFilenameChars, '.');
 			if (!dotAddress) goto nonNumericFile; // Shouldn't happen?
 
-			int dotPos = (uint32_t)dotAddress - (uint32_t)storedFilenameChars;
+			int dotPos = (uintptr_t)dotAddress - (uintptr_t)storedFilenameChars;
 			if (dotPos < filePrefixLength + 3) goto nonNumericFile;
 
 			char const* numbersStartAddress = &storedFilenameChars[filePrefixLength];
@@ -1716,7 +1716,7 @@ int Browser::setEnteredTextFromCurrentFilename() {
 		char const* enteredTextChars = enteredText.get();
 		char const* dotAddress = strrchr(enteredTextChars, '.');
 		if (dotAddress) {
-			int dotPos = (uint32_t)dotAddress - (uint32_t)enteredTextChars;
+			int dotPos = (uintptr_t)dotAddress - (uintptr_t)enteredTextChars;
 			error = enteredText.shorten(dotPos);					if (error) return error;
 		}
 	}
@@ -1752,7 +1752,7 @@ int Browser::goUpOneDirectoryLevel() {
 	char const* slashAddress = strrchr(currentDirChars, '/');
 	if (!slashAddress || slashAddress == currentDirChars) return ERROR_NO_FURTHER_DIRECTORY_LEVELS_TO_GO_UP;
 
-	int slashPos = (uint32_t)slashAddress - (uint32_t)currentDirChars;
+	int slashPos = (uintptr_t)slashAddress - (uintptr_t)currentDirChars;
 	int error = enteredText.set(slashAddress + 1);		if (error) return error;
 	currentDir.shorten(slashPos);						if (error) return error;
 	enteredTextEditPos = 0;

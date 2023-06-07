@@ -22,14 +22,14 @@
 #include "GeneralMemoryAllocator.h"
 #include "mtu_all_cpus.h"
 #include "functions.h"
-#include "numericdriver.h";
+#include "numericdriver.h"
 
 MemoryRegion::MemoryRegion() : emptySpaces(sizeof(EmptySpaceRecord))
 {
 	numAllocations = 0;
 }
 
-void MemoryRegion::setup(void* emptySpacesMemory, int emptySpacesMemorySize, uint32_t regionBegin, uint32_t regionEnd) {
+void MemoryRegion::setup(void* emptySpacesMemory, int emptySpacesMemorySize, uintptr_t regionBegin, uintptr_t regionEnd) {
 	emptySpaces.setStaticMemory(emptySpacesMemory, emptySpacesMemorySize);
 
 	uint32_t memorySizeWithoutHeaders = regionEnd - regionBegin - 16;
@@ -73,15 +73,15 @@ void MemoryRegion::sanityCheck() {
 void MemoryRegion::verifyMemoryNotFree(void* address, uint32_t spaceSize) {
 	for (int i = 0; i < emptySpaces.getNumElements(); i++) {
 		EmptySpaceRecord* emptySpaceRecord = (EmptySpaceRecord*)emptySpaces.getElementAddress(i);
-		if (emptySpaceRecord->address == (uint32_t)address) {
+		if (emptySpaceRecord->address == (uintptr_t)address) {
 			Uart::println("Exact address free!");
 			numericDriver.freezeWithError("dddffffd");
 		}
-		else if (emptySpaceRecord->address <= (uint32_t)address && (emptySpaceRecord->address + emptySpaceRecord->length > (uint32_t)address)) {
+		else if (emptySpaceRecord->address <= (uintptr_t)address && (emptySpaceRecord->address + emptySpaceRecord->length > (uintptr_t)address)) {
 			Uart::println("free mem overlap on left!");
 			numericDriver.freezeWithError("dddd");
 		}
-		else if ((uint32_t)address <= (uint32_t)emptySpaceRecord->address && ((uint32_t)address + spaceSize > emptySpaceRecord->address)) {
+		else if ((uintptr_t)address <= (uintptr_t)emptySpaceRecord->address && ((uintptr_t)address + spaceSize > emptySpaceRecord->address)) {
 			Uart::println("free mem overlap on right!");
 			numericDriver.freezeWithError("eeee");
 		}
@@ -97,7 +97,7 @@ static EmptySpaceRecord* recordToMergeWith;
 
 // Specify the address and size of the actual memory region not including its headers, which this function will write and don't have to contain valid data yet.
 // spaceSize can even be 0 or less if you know it's going to get merged.
-inline void MemoryRegion::markSpaceAsEmpty(uint32_t address, uint32_t spaceSize, bool mayLookLeft, bool mayLookRight) {
+inline void MemoryRegion::markSpaceAsEmpty(uintptr_t address, uint32_t spaceSize, bool mayLookLeft, bool mayLookRight) {
 
 	int biggerRecordSearchFromIndex = 0;
 	int insertRangeBegin;
@@ -124,7 +124,7 @@ inline void MemoryRegion::markSpaceAsEmpty(uint32_t address, uint32_t spaceSize,
 			// If we are still here, we are going to merge right as well as left, so gather a little bit more info
 			emptySpaceToRight.length = *lookRight & SPACE_SIZE_MASK;
 			spaceSize += emptySpaceToRight.length + 8;
-			emptySpaceToRight.address = (uint32_t)lookRight + 4;
+			emptySpaceToRight.address = (uintptr_t)lookRight + 4;
 			EmptySpaceRecord* recordToDelete = &emptySpaceToRight; // The default, which we may override below.
 
 			// If the "right" space is bigger, delete the "left" one's record
@@ -137,7 +137,7 @@ inline void MemoryRegion::markSpaceAsEmpty(uint32_t address, uint32_t spaceSize,
 			// Otherwise, do the opposite - delete the "right" space's record. That default was set back up above.
 
 			int nextIndex;
-			biggerRecordSearchFromIndex = emptySpaces.searchMultiWordExact((uint32_t*)recordToDelete, &nextIndex);
+			biggerRecordSearchFromIndex = emptySpaces.searchMultiWordExact((uintptr_t*)recordToDelete, &nextIndex);
 
 			if (biggerRecordSearchFromIndex == -1) { // It might not have been found if array got full so there was no record for this empty space.
 				biggerRecordSearchFromIndex = nextIndex;
@@ -157,7 +157,7 @@ inline void MemoryRegion::markSpaceAsEmpty(uint32_t address, uint32_t spaceSize,
 		if ((*lookRight & SPACE_TYPE_MASK) == SPACE_HEADER_EMPTY) {
 			emptySpaceToRight.length = *lookRight & SPACE_SIZE_MASK;
 			spaceSize += emptySpaceToRight.length + 8;
-			emptySpaceToRight.address = (uint32_t)lookRight + 4;
+			emptySpaceToRight.address = (uintptr_t)lookRight + 4;
 
 			recordToMergeWith = &emptySpaceToRight;
 			goto goingToReplaceOldRecord;
@@ -172,7 +172,7 @@ justInsertRecord:
 		EmptySpaceRecord newRecord;
 		newRecord.length = spaceSize;
 		newRecord.address = address;
-		int i = emptySpaces.insertAtKeyMultiWord((uint32_t*)&newRecord, insertRangeBegin);
+		int i = emptySpaces.insertAtKeyMultiWord((uintptr_t*)&newRecord, insertRangeBegin);
 #if ALPHA_OR_BETA_VERSION
 		if (i == -1) { // Array might have gotten full. This has to be coped with. Perhaps in a perfect world we should opt to throw away the smallest empty space to make space for this one if this one is bigger?
 			Uart::print("Lost track of empty space in region: ");
@@ -184,7 +184,7 @@ justInsertRecord:
 	if (false) {
 
 goingToReplaceOldRecord:
-		int i = emptySpaces.searchMultiWordExact((uint32_t*)recordToMergeWith, &insertRangeBegin, biggerRecordSearchFromIndex);
+		int i = emptySpaces.searchMultiWordExact((uintptr_t*)recordToMergeWith, &insertRangeBegin, biggerRecordSearchFromIndex);
 		if (i == -1) { // The record might not exist because there wasn't room to insert it when the empty space was created.
 #if ALPHA_OR_BETA_VERSION
 			Uart::print("Found orphaned empty space in region: ");
@@ -205,7 +205,7 @@ goingToReplaceOldRecord:
 				newRecordPreview.length = spaceSize;
 				newRecordPreview.address = address;
 
-				int insertBefore = emptySpaces.searchMultiWord((uint32_t*)&newRecordPreview, GREATER_OR_EQUAL, i + 2);
+				int insertBefore = emptySpaces.searchMultiWord((uintptr_t*)&newRecordPreview, GREATER_OR_EQUAL, i + 2);
 				emptySpaces.moveElementsLeft(i + 1, insertBefore, 1);
 				i = insertBefore - 1;
 			}
@@ -242,7 +242,7 @@ uint32_t MemoryRegion::freeSomeStealableMemory(int totalSizeNeeded, void* thingN
 	uint32_t traversalNumberBeforeQueues = currentTraversalNo;
 
 	Stealable* stealable;
-	uint32_t newSpaceAddress;
+	uintptr_t newSpaceAddress;
 	uint32_t spaceSize;
 
 	int numberReassessed = 0;
@@ -319,7 +319,7 @@ moveOn:
 		}
 
 		// Ok, we've got one Stealable
-		uint32_t* __restrict__ header = (uint32_t*)((uint32_t)stealable - 4);
+		uint32_t* __restrict__ header = (uint32_t*)((uintptr_t)stealable - 4);
 		spaceSize = (*header & SPACE_SIZE_MASK);
 
 		stealable->lastTraversalNo = currentTraversalNo;
@@ -327,7 +327,7 @@ moveOn:
 		// How much additional space would we need on top of this Stealable?
 		int amountToExtend = totalSizeNeeded - spaceSize;
 
-		newSpaceAddress = (uint32_t)stealable;
+		newSpaceAddress = (uintptr_t)stealable;
 
 		// If that one Stealable alone was big enough, that's great
 		if (amountToExtend <= 0) goto foundIt;
@@ -383,7 +383,7 @@ void* MemoryRegion::alloc(uint32_t requiredSize, uint32_t* getAllocatedSize, boo
 	requiredSize = (requiredSize + 3) & 0b11111111111111111111111111111100; // Jump to 4-byte boundary
 
 	int allocatedSize;
-	uint32_t allocatedAddress;
+	uintptr_t allocatedAddress;
 	int i;
 
 	if (!emptySpaces.getNumElements()) goto noEmptySpace;
@@ -420,10 +420,10 @@ usedWholeSpace:
 
 			allocatedSize = requiredSize;
 
-			uint32_t extraSpaceAddress = allocatedAddress + allocatedSize + 8;
+			uintptr_t extraSpaceAddress = allocatedAddress + allocatedSize + 8;
 
-			uint32_t* __restrict__ header = (uint32_t*)((uint32_t)extraSpaceAddress - 4);
-			uint32_t* __restrict__ footer = (uint32_t*)((uint32_t)extraSpaceAddress + extraSpaceSizeWithoutItsHeaders);
+			uint32_t* __restrict__ header = (uint32_t*)((uintptr_t)extraSpaceAddress - 4);
+			uint32_t* __restrict__ footer = (uint32_t*)((uintptr_t)extraSpaceAddress + extraSpaceSizeWithoutItsHeaders);
 
 			// Update headers and footers
 			uint32_t headerData = SPACE_HEADER_EMPTY | extraSpaceSizeWithoutItsHeaders;
@@ -446,7 +446,7 @@ usedWholeSpace:
 				EmptySpaceRecord searchThing;
 				searchThing.length = extraSpaceSizeWithoutItsHeaders;
 				searchThing.address = extraSpaceAddress;
-				int insertAt = emptySpaces.searchMultiWord((uint32_t*)&searchThing, GREATER_OR_EQUAL, 0, i);
+				int insertAt = emptySpaces.searchMultiWord((uintptr_t*)&searchThing, GREATER_OR_EQUAL, 0, i);
 
 				emptySpaces.moveElementsRight(insertAt, i, 1);
 
@@ -513,7 +513,7 @@ uint32_t MemoryRegion::shortenRight(void* address, uint32_t newSize) {
 	uint32_t oldAllocatedSize = *header & SPACE_SIZE_MASK;
 	uint32_t allocationType = *header & SPACE_TYPE_MASK;
 
-	uint32_t* __restrict__ lookRight = (uint32_t*)((uint32_t)address + oldAllocatedSize + 4); // Looking to what's directly right of our old allocated space
+	uint32_t* __restrict__ lookRight = (uint32_t*)((uintptr_t)address + oldAllocatedSize + 4); // Looking to what's directly right of our old allocated space
 
 	int newSizeLowerLimit = oldAllocatedSize;
 	if ((*lookRight & SPACE_TYPE_MASK) != SPACE_HEADER_EMPTY) {
@@ -528,7 +528,7 @@ uint32_t MemoryRegion::shortenRight(void* address, uint32_t newSize) {
 	uint32_t* __restrict__ footer = (uint32_t*)((char*)address + newSize);
 	*footer = *header;
 
-	uint32_t emptySpaceStart = (uint32_t)footer + 8;
+	uintptr_t emptySpaceStart = (uintptr_t)footer + 8;
 	uint32_t emptySpaceSize = oldAllocatedSize - newSize - 8;
 
 	markSpaceAsEmpty(emptySpaceStart, emptySpaceSize, false, true);
@@ -549,7 +549,7 @@ uint32_t MemoryRegion::shortenLeft(void* address, uint32_t amountToShorten, uint
 	newSize = getMax(newSize, 4);
 	newSize = (newSize + 3) & 0b11111111111111111111111111111100; // Round new size up to 4-byte boundary
 
-	uint32_t* __restrict__ lookLeft = (uint32_t*)((uint32_t)address - 8); // Looking to what's directly left of our old allocated space
+	uint32_t* __restrict__ lookLeft = (uint32_t*)((uintptr_t)address - 8); // Looking to what's directly left of our old allocated space
 
 	int newSizeLowerLimit = oldAllocatedSize;
 	if ((*lookLeft & SPACE_TYPE_MASK) != SPACE_HEADER_EMPTY) {
@@ -570,13 +570,13 @@ uint32_t MemoryRegion::shortenLeft(void* address, uint32_t amountToShorten, uint
 	*header = newSize | allocationType;
 	*footer = *header;
 
-	markSpaceAsEmpty((uint32_t)address, amountShortened - 8, true, false);
+	markSpaceAsEmpty((uintptr_t)address, amountShortened - 8, true, false);
 
 	return amountShortened;
 }
 
 
-void MemoryRegion::writeTempHeadersBeforeASteal(uint32_t newStartAddress, uint32_t newSize) {
+void MemoryRegion::writeTempHeadersBeforeASteal(uintptr_t newStartAddress, uint32_t newSize) {
 
 	uint32_t headerValue = SPACE_HEADER_ALLOCATED | newSize;
 
@@ -593,13 +593,13 @@ void MemoryRegion::writeTempHeadersBeforeASteal(uint32_t newStartAddress, uint32
 // Returns new size, or same size if couldn't extend.
 uint32_t MemoryRegion::extendRightAsMuchAsEasilyPossible(void* address) {
 
-	uint32_t* __restrict__ header = (uint32_t*)(address - 4);
+	uint32_t* __restrict__ header = (uint32_t*)((uintptr_t)address - 4);
 	uint32_t spaceSize = (*header & SPACE_SIZE_MASK);
 
-	uint32_t* __restrict__ lookRight = (uint32_t*)((uint32_t)address + spaceSize + 4);
+	uint32_t* __restrict__ lookRight = (uint32_t*)((uintptr_t)address + spaceSize + 4);
 
 	uint32_t emptySpaceHereSizeWithoutHeaders = *lookRight & SPACE_SIZE_MASK;
-	uint32_t spaceHereAddress = (uint32_t)(lookRight + 1);
+	uintptr_t spaceHereAddress = (uintptr_t)(lookRight + 1);
 	uint32_t spaceType = *lookRight & SPACE_TYPE_MASK;
 
 	if (spaceType == SPACE_HEADER_STEALABLE) {
@@ -613,7 +613,7 @@ uint32_t MemoryRegion::extendRightAsMuchAsEasilyPossible(void* address) {
 		EmptySpaceRecord oldEmptySpace;
 		oldEmptySpace.address = spaceHereAddress;
 		oldEmptySpace.length = emptySpaceHereSizeWithoutHeaders;
-		emptySpaces.deleteAtKeyMultiWord((uint32_t*)&oldEmptySpace);
+		emptySpaces.deleteAtKeyMultiWord((uintptr_t*)&oldEmptySpace);
 	}
 
 	else goto finished;
@@ -627,7 +627,7 @@ uint32_t MemoryRegion::extendRightAsMuchAsEasilyPossible(void* address) {
 		*header = newHeaderData;
 
 		// Write footer
-		uint32_t* __restrict__ footer = (uint32_t*)(address + spaceSize);
+		uint32_t* __restrict__ footer = (uint32_t*)((uintptr_t)address + spaceSize);
 		*footer = newHeaderData;
 	}
 
@@ -641,7 +641,7 @@ NeighbouringMemoryGrabAttemptResult MemoryRegion::attemptToGrabNeighbouringMemor
 
 	NeighbouringMemoryGrabAttemptResult toReturn;
 
-	toReturn.address = (uint32_t)originalSpaceAddress;
+	toReturn.address = (uintptr_t)originalSpaceAddress;
 
 	toReturn.amountsExtended[0] = 0;
 	toReturn.amountsExtended[1] = 0;
@@ -656,8 +656,8 @@ NeighbouringMemoryGrabAttemptResult MemoryRegion::attemptToGrabNeighbouringMemor
 
 		uint32_t amountOfExtraSpaceFoundSoFar = 0;
 
-		uint32_t* __restrict__ lookRight = (uint32_t*)((uint32_t)originalSpaceAddress + originalSpaceSize + 4);
-		uint32_t* __restrict__ lookLeft = (uint32_t*)((uint32_t)originalSpaceAddress - 8);
+		uint32_t* __restrict__ lookRight = (uint32_t*)((uintptr_t)originalSpaceAddress + originalSpaceSize + 4);
+		uint32_t* __restrict__ lookLeft = (uint32_t*)((uintptr_t)originalSpaceAddress - 8);
 
 tryNotStealingFirst:
 		// At each point in the exploration, we want to first look both left and right before "stealing", as opposed to just grabbing unused space,
@@ -674,9 +674,9 @@ tryNotStealingFirst:
 
 				uint32_t emptySpaceHereSizeWithoutHeaders = *lookLeftOrRight & SPACE_SIZE_MASK;
 
-				uint32_t spaceHereAddress = lookingLeft ?
-						(uint32_t)lookLeft - emptySpaceHereSizeWithoutHeaders :
-						(uint32_t)(lookRight + 1);
+				uintptr_t spaceHereAddress = lookingLeft ?
+						(uintptr_t)lookLeft - emptySpaceHereSizeWithoutHeaders :
+						(uintptr_t)(lookRight + 1);
 
 				Stealable* stealable;
 
@@ -703,7 +703,7 @@ tryNotStealingFirst:
 							EmptySpaceRecord oldEmptySpace;
 							oldEmptySpace.address = spaceHereAddress;
 							oldEmptySpace.length = emptySpaceHereSizeWithoutHeaders;
-							bool success = emptySpaces.deleteAtKeyMultiWord((uint32_t*)&oldEmptySpace);
+							bool success = emptySpaces.deleteAtKeyMultiWord((uintptr_t*)&oldEmptySpace);
 #if TEST_GENERAL_MEMORY_ALLOCATION
 							if (!success) {
 								// TODO: actually, this is basically ok - it should be allowed to not find the key, because the empty space might indeed not have a record if there wasn't room to insert one when the empty space was created.
@@ -799,7 +799,7 @@ void MemoryRegion::extend(void* address, uint32_t minAmountToExtend, uint32_t id
 			surplusWeGot -= amountToCutRightIncludingHeaders;
 			grabResult.amountsExtended[0] -= amountToCutRightIncludingHeaders;
 
-			markSpaceAsEmpty((uint32_t)address + oldAllocatedSize + grabResult.amountsExtended[0] + 8, amountToCutRightIncludingHeaders - 8, false, false);
+			markSpaceAsEmpty((uintptr_t)address + oldAllocatedSize + grabResult.amountsExtended[0] + 8, amountToCutRightIncludingHeaders - 8, false, false);
 		}
 
 		// If we still have more than we wanted...
@@ -846,10 +846,10 @@ void MemoryRegion::dealloc(void* address) {
 
 	//uint16_t startTime = *TCNT[TIMER_SYSTEM_FAST];
 
-	uint32_t* __restrict__ header = (uint32_t*)((uint32_t)address - 4);
+	uint32_t* __restrict__ header = (uint32_t*)((uintptr_t)address - 4);
 	uint32_t spaceSize = (*header & SPACE_SIZE_MASK);
 
-	markSpaceAsEmpty((uint32_t)address, spaceSize);
+	markSpaceAsEmpty((uintptr_t)address, spaceSize);
 
 	/*
 	uint16_t endTime = *TCNT[TIMER_SYSTEM_FAST];
