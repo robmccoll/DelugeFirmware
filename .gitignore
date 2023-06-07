@@ -14,3 +14,6 @@
 /e2-build-release-oled/
 *.launch
 /toolchain/*
+# Files from the x86_64 build
+obj/
+deluge86
