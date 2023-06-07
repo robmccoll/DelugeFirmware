@@ -1,0 +1,4 @@
+
+void initSPIBSC() {
+	/* TODO COMPAT */
+}

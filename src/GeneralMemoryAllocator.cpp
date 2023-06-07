@@ -32,8 +32,8 @@
 char emptySpacesMemory[sizeof(EmptySpaceRecord) * 512];
 char emptySpacesMemoryInternal[sizeof(EmptySpaceRecord) * 1024];
 
-extern uint32_t __heap_start;
-extern uint32_t __heap_end;
+extern uintptr_t __heap_start;
+extern uintptr_t __heap_end;
 
 GeneralMemoryAllocator generalMemoryAllocator;
 

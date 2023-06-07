@@ -1,0 +1,4 @@
+
+void mtuEnableAccess() {
+	/* TODO COMPAT */
+}

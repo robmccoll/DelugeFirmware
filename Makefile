@@ -24,15 +24,23 @@
 
 CPP_SRC=$(wildcard src/*.cpp)
 CPP_OBJ=$(subst .cpp,.o,$(subst src/,obj/,$(CPP_SRC)))
+C_SRC=$(wildcard src/*.c) $(wildcard src/compat/*.c)
+C_OBJ=$(subst .c,.o,$(subst src/,obj/,$(C_SRC)))
 INCLUDE=-I src/ -I src/compat/
 
-deluge86: $(CPP_OBJ) 
-	$(CC) -o $@ $^
+deluge86: $(CPP_OBJ) $(C_OBJ)
+	$(CXX) -o $@ $^
 
 obj:
 	mkdir -p obj
 
-obj/%.o: src/%.cpp | obj
+obj/compat:
+	mkdir -p obj/compat
+
+obj/%.o: src/%.cpp | obj obj/compat
+	$(CXX) -c -o $@ $(INCLUDE) $^
+
+obj/%.o: src/%.c | obj
 	$(CC) -c -o $@ $(INCLUDE) $^
 
 .PHONY: clean

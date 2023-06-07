@@ -762,7 +762,7 @@ void AutoParam::deleteNodesWithinRegion(ModelStackWithAutoParam const* modelStac
 		int resultingIndexes[2];
 
 		{
-			int32_t searchTerms[2];
+			uintptr_t searchTerms[2];
 			searchTerms[0] = pos;
 			searchTerms[1] = pos + length;
 			wrapping = (searchTerms[1] >= effectiveLength);
@@ -902,7 +902,7 @@ int AutoParam::homogenizeRegion(ModelStackWithAutoParam const* modelStack, int32
 		// Should probably also check that stuff doesn't exist too far right - but that's a bit more complicated.
 #endif
 
-	int32_t edgePositions[2];
+	uintptr_t edgePositions[2];
 	bool anyWrap;
 
 	// Playing forwards...
@@ -2098,7 +2098,7 @@ justShiftEverything:
 		endPos -= lengthBeforeLoop;
 		int resultingIndexes[2];
 		{
-			int32_t searchTerms[2];
+			uintptr_t searchTerms[2];
 			searchTerms[0] = endPos;
 			searchTerms[1] = pos;
 			nodes.searchDual(searchTerms, resultingIndexes);
@@ -2188,7 +2188,7 @@ justShiftEverything:
 	else { // No wrap
 		int resultingIndexes[2];
 		{
-			int32_t searchTerms[2];
+			uintptr_t searchTerms[2];
 			searchTerms[0] = pos;
 			searchTerms[1] = endPos;
 			nodes.searchDual(searchTerms, resultingIndexes);
@@ -2374,7 +2374,7 @@ void AutoParam::stealNodes(ModelStackWithAutoParam const* modelStack, int32_t po
 	int32_t stopAt = pos + regionLength;
 	int32_t durationAfterWrap = (stopAt - loopLength);
 
-	int32_t searchTerms[2];
+	uintptr_t searchTerms[2];
 	searchTerms[0] = pos;
 	searchTerms[1] = stopAt;
 	int resultingIndexes[2];

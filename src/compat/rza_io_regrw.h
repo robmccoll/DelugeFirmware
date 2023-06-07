@@ -22,64 +22,34 @@
 * Copyright (C) 2014 Renesas Electronics Corporation. All rights reserved.
 *******************************************************************************/
 /*******************************************************************************
-* File Name     : r_typedefs.h
+* File Name     : rza_io_regrw.h
 * Device(s)     : RZ/A1H (R7S721001)
 * Tool-Chain    : GNUARM-NONEv14.02-EABI
 * H/W Platform  : RSK+RZA1H CPU Board
-* Description   : basic type definition
-******************************************************************************/
+* Description   : Low level register read/write header
+*******************************************************************************/
 /*******************************************************************************
 * History       : DD.MM.YYYY Version Description
 *               : 21.10.2014 1.00
 *******************************************************************************/
 
-/******************************************************************************
-Includes <System Includes> , "Project Includes"
-******************************************************************************/
-#include <stdint.h>
 /* Multiple inclusion prevention macro */
-#ifndef R_TYPEDEFS_H
-#define R_TYPEDEFS_H
+#ifndef RZA_IO_REGRW_H
+#define RZA_IO_REGRW_H
 
-/* in case <stdio.h> has defined it. */
-#ifndef NULL
-#define NULL 0
-#endif
+#include "r_typedefs.h"
 
 /******************************************************************************
-Macro definitions
+Functions Prototypes
 ******************************************************************************/
-#if !defined(__bool_true_false_are_defined) && !defined(__cplusplus)
+void RZA_IO_RegWrite_8(volatile uint8_t* ioreg, uint8_t write_value, uint8_t shift, uint8_t mask);
+void RZA_IO_RegWrite_16(volatile uint16_t* ioreg, uint16_t write_value, uint16_t shift, uint16_t mask);
+void RZA_IO_RegWrite_32(volatile uint32_t* ioreg, uint32_t write_value, uint32_t shift, uint32_t mask);
+uint8_t RZA_IO_RegRead_8(volatile uint8_t* ioreg, uint8_t shift, uint8_t mask);
+uint16_t RZA_IO_RegRead_16(volatile uint16_t* ioreg, uint16_t shift, uint16_t mask);
+uint32_t RZA_IO_RegRead_32(volatile uint32_t* ioreg, uint32_t shift, uint32_t mask);
 
-#define false 0
-#define true 1
-
+/* RZA_IO_REGRW_H */
 #endif
 
-#define UNUSED_PARAM(param) (void)(param)
-
-#define UNUSED_VARIABLE(param) (void)(param)
-
-typedef unsigned char byte; // Added by Rohan. Deprecate this!
-
-/******************************************************************************
-Typedef definitions
-COMPAT - using stdint.h types
-******************************************************************************/
-typedef char char_t;
-typedef unsigned int bool_t;
-typedef int int_t;
-// typedef signed char         int8_t;
-// typedef signed short        int16_t;
-// typedef signed long         int32_t;
-// typedef signed long long    int64_t;
-// typedef unsigned char       uint8_t;
-// typedef unsigned short      uint16_t;
-// typedef unsigned long       uint32_t;
-// typedef unsigned long long  uint64_t;
-// typedef float               float32_t;
-// typedef double              float64_t;
-// typedef long double         float128_t;
-
-/* R_TYPEDEFS_H */
-#endif
+/* End of File */

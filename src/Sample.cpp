@@ -177,7 +177,7 @@ SampleCache* Sample::getOrCreateCache(SampleHolder* sampleHolder, int32_t phaseI
 		skipSamplesAtStart = lengthInSamples - sampleHolder->getEndPos(false);
 	}
 
-	uint32_t keyWords[4];
+	uintptr_t keyWords[4];
 	keyWords[0] = phaseIncrement;
 	keyWords[1] = timeStretchRatio;
 	keyWords[2] = skipSamplesAtStart;
