@@ -1,5 +1,5 @@
 /*
- * Copyright © 2014-2023 Synthstrom Audible Limited
+ * Copyright 2014-2023 Synthstrom Audible Limited
  *
  * This file is part of The Synthstrom Audible Deluge Firmware.
  *
@@ -2907,7 +2907,7 @@ void InstrumentClipView::enterDrumCreator(ModelStackWithNoteRow* modelStack, boo
 
 	Uart::println("enterDrumCreator");
 
-    char* prefix;
+    const char* prefix;
     String soundName;
 
     if (doRecording)
@@ -3807,7 +3807,7 @@ void InstrumentClipView::editNoteRepeat(int offset) {
 	int32_t squareStart = getPosFromSquare(editPadPresses[i].xDisplay);
 	int32_t squareWidth = getSquareWidth(editPadPresses[i].xDisplay, modelStackWithNoteRow->getLoopLength());
 
-	int32_t searchTerms[2];
+    uintptr_t searchTerms[2];
 	searchTerms[0] = squareStart;
 	searchTerms[1] = squareStart + squareWidth;
 	int resultingIndexes[2];
