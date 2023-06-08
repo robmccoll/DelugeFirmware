@@ -129,7 +129,8 @@ struct st_mtu2 {                    /* MTU2             */
 	volatile uint8_t TICCR;         /*  TICCR           */
 };
 
-#define MTU2 (*(struct st_mtu2*)0xFCFF0000uL) /* MTU2 */
+extern struct st_mtu2 MTU2;
+//#define MTU2    (*(struct st_mtu2    *)0xFCFF0000uL) /* MTU2 */
 
 #define MTU2TCR_2 MTU2.TCR_2
 #define MTU2TMDR_2 MTU2.TMDR_2

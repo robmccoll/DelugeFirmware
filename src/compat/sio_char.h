@@ -37,6 +37,10 @@
 #ifndef SIO_CHAR_H
 #define SIO_CHAR_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /******************************************************************************
 Includes   <System Includes> , "Project Includes"
 ******************************************************************************/
@@ -73,24 +77,17 @@ extern char_t picTxBuffer[];
 extern char_t midiTxBuffer[];
 
 // These are not thread safe! Do not call in ISRs.
-#define bufferPICUart(charToSend)                                                                                      \
-	{                                                                                                                  \
-		picTxBuffer[uartItems[UART_ITEM_PIC].txBufferWritePos + UNCACHED_MIRROR_OFFSET] = charToSend;                  \
-		uartItems[UART_ITEM_PIC].txBufferWritePos =                                                                    \
-		    (uartItems[UART_ITEM_PIC].txBufferWritePos + 1) & (PIC_TX_BUFFER_SIZE - 1);                                \
-	}
-#define bufferMIDIUart(charToSend)                                                                                     \
-	{                                                                                                                  \
-		midiTxBuffer[uartItems[UART_ITEM_MIDI].txBufferWritePos + UNCACHED_MIRROR_OFFSET] = charToSend;                \
-		uartItems[UART_ITEM_MIDI].txBufferWritePos =                                                                   \
-		    (uartItems[UART_ITEM_MIDI].txBufferWritePos + 1) & (MIDI_TX_BUFFER_SIZE - 1);                              \
-	}
+void bufferMIDIUart(char_t charToSend);
+void bufferPICUart(char_t charToSend);
 
 // Aliases
 #define bufferPICIndicatorsUart(charToSend) bufferPICUart(charToSend)
 #define bufferPICPadsUart(charToSend) bufferPICUart(charToSend)
 
-/* SIO_CHAR_H */
+#ifdef __cplusplus
+}
 #endif
 
+/* SIO_CHAR_H */
+#endif
 /* End of File */

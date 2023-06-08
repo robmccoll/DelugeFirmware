@@ -30,33 +30,11 @@
  */
 
 /**
- * @defgroup groupMaths Math Functions
- *
- * An assortment of vector/matrix math operations.
- */
-
-/**
  * @defgroup groupDSPs Signal Processing Functions
  *
  *
  * An assortment of signal processing operations, including FFT/IFFT, FIR,
  * and IIR operations.
- */
-
-/**
- * @defgroup groupIMGPROCs Image Processing Functions
- *
- *
- * An assortment of image processing operations, including image resize
- * and rotation operations.
- */
-
-/**
- * @defgroup groupPhysics Physics Functions
- *
- *
- * An assortment of collision detection operations, including AABB, relative
- * velocity, and contact impulse calculations.
  */
 
 #ifndef NE10_H
@@ -74,10 +52,7 @@ extern "C" {
 #include "NE10_types.h"
 #include "NE10_macros.h"
 #include "NE10_init.h"
-#include "NE10_math.h"
 #include "NE10_dsp.h"
-#include "NE10_imgproc.h"
-#include "NE10_physics.h"
 
 #ifdef __cplusplus
 }

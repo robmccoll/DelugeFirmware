@@ -28,8 +28,11 @@ C_SRC=$(wildcard src/*.c) $(wildcard src/compat/*.c)
 C_OBJ=$(subst .c,.o,$(subst src/,obj/,$(C_SRC)))
 INCLUDE=-I src/ -I src/compat/
 
+# Add debug for now
+FLAGS=-g
+
 deluge86: $(CPP_OBJ) $(C_OBJ)
-	$(CXX) -o $@ $^
+	$(CXX) $(FLAGS) -o $@ $^
 
 obj:
 	mkdir -p obj
@@ -38,10 +41,10 @@ obj/compat:
 	mkdir -p obj/compat
 
 obj/%.o: src/%.cpp | obj obj/compat
-	$(CXX) -c -o $@ $(INCLUDE) $^
+	$(CXX) $(FLAGS) -c -o $@ $(INCLUDE) $^
 
 obj/%.o: src/%.c | obj
-	$(CC) -c -o $@ $(INCLUDE) $^
+	$(CC) $(FLAGS) -c -o $@ $(INCLUDE) $^
 
 .PHONY: clean
 clean:
