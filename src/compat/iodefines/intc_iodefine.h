@@ -543,7 +543,8 @@ struct st_intc
 };
 
 
-#define INTC    (*(struct st_intc    *)0xE8201000uL) /* INTC */
+extern struct st_intc INTC;
+//#define INTC    (*(struct st_intc    *)0xE8201000uL) /* INTC */
 
 
 #define INTCICDDCR INTC.ICDDCR

@@ -25,17 +25,11 @@
 
 static const uint8_t timerCST[] = {MTU2_TSTR_CST0, MTU2_TSTR_CST1, MTU2_TSTR_CST2, MTU2_TSTR_CST3, MTU2_TSTR_CST4};
 
-static inline void enableTimer(int timerNo) {
-	MTU2.TSTR |= timerCST[timerNo];
-}
+void enableTimer(int timerNo);
 
-static inline void disableTimer(int timerNo) {
-	MTU2.TSTR &= ~timerCST[timerNo];
-}
+void disableTimer(int timerNo);
 
-static inline bool_t isTimerEnabled(int timerNo) {
-	return MTU2.TSTR & timerCST[timerNo];
-}
+bool_t isTimerEnabled(int timerNo);
 
 
 static volatile uint8_t* const TIER[] = {&MTU2.TIER_0, &MTU2.TIER_1, &MTU2.TIER_2, &MTU2.TIER_3, &MTU2.TIER_4};
