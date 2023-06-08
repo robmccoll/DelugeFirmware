@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+#include "compat.h"
 
 typedef int8_t int8x8_t	__attribute__ ((__vector_size__ (8)));
 typedef int16_t int16x4_t __attribute__ ((__vector_size__ (8)));
@@ -25,6 +26,7 @@ __extension__ static __inline int16x8_t __attribute__ ((__always_inline__))
 vld1q_s16 (const int16_t * __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x8_t){0};
 }
 
@@ -32,6 +34,7 @@ __extension__ static __inline int16x8_t __attribute__ ((__always_inline__))
 vsubq_s16 (int16x8_t __a, int16x8_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x8_t){0};
 }
 
@@ -39,6 +42,7 @@ __extension__ static __inline int16x8_t __attribute__ ((__always_inline__))
 vaddq_s16 (int16x8_t __a, int16x8_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x8_t){0};
 }
 
@@ -46,6 +50,7 @@ __extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
 vqdmulh_n_s16 (int16x4_t __a, int16_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x4_t){0};
 }
 
@@ -53,6 +58,7 @@ __extension__ static __inline int16x8_t __attribute__ ((__always_inline__))
 vqdmulhq_n_s16 (int16x8_t __a, int16_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x8_t){0};
 }
 
@@ -60,6 +66,7 @@ __extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
 vget_low_s16 (int16x8_t __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x4_t){0};
 }
 
@@ -67,6 +74,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vmull_s16 (int16x4_t __a, int16x4_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -74,6 +82,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vmlal_s16 (int32x4_t __a, int16x4_t __b, int16x4_t __c)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -81,6 +90,7 @@ __extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
 vget_high_s16 (int16x8_t __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x4_t){0};
 }
 
@@ -88,6 +98,7 @@ __extension__ static __inline int32x2_t __attribute__ ((__always_inline__))
 vget_high_s32 (int32x4_t __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x2_t){0};
 }
 
@@ -95,6 +106,7 @@ __extension__ static __inline int32x2_t __attribute__ ((__always_inline__))
 vget_low_s32 (int32x4_t __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x2_t){0};
 }
 
@@ -102,6 +114,7 @@ __extension__ static __inline int32x2_t __attribute__ ((__always_inline__))
 vpadd_s32 (int32x2_t __a, int32x2_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x2_t){0};
 }
 
@@ -109,6 +122,7 @@ __extension__ static __inline int32x2_t __attribute__ ((__always_inline__))
 vadd_s32 (int32x2_t __a, int32x2_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x2_t){0};
 }
 
@@ -116,6 +130,7 @@ __extension__ static __inline int32_t __attribute__ ((__always_inline__))
 vget_lane_s32 (int32x2_t __a, const int __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32_t)0;
 }
 
@@ -123,6 +138,7 @@ __extension__ static __inline int32x2_t __attribute__ ((__always_inline__))
 vreinterpret_s32_u32 (uint32x2_t __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x2_t){0};
 }
 
@@ -130,6 +146,7 @@ __extension__ static __inline uint32x4_t __attribute__ ((__always_inline__))
 vshlq_n_u32 (uint32x4_t __a, const int __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (uint32x4_t){0};
 }
 
@@ -137,6 +154,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vreinterpretq_s32_u32 (uint32x4_t __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -144,6 +162,7 @@ __extension__ static __inline int8x8_t __attribute__ ((__always_inline__))
 vshrn_n_s16 (int16x8_t __a, const int __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int8x8_t){0};
 }
 
@@ -151,6 +170,7 @@ __extension__ static __inline uint32_t __attribute__ ((__always_inline__))
 vgetq_lane_u32 (uint32x4_t __a, const int __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (uint32_t){0};
 }
 
@@ -158,6 +178,7 @@ __extension__ static __inline uint32x4_t __attribute__ ((__always_inline__))
 vld1q_lane_u32 (const uint32_t * __a, uint32x4_t __b, const int __c)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (uint32x4_t){0};
 }
 
@@ -165,6 +186,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vaddq_s32 (int32x4_t __a, int32x4_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -172,6 +194,7 @@ __extension__ static __inline uint32x4_t __attribute__ ((__always_inline__))
 vaddq_u32 (uint32x4_t __a, uint32x4_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (uint32x4_t){0};
 }
 
@@ -179,6 +202,7 @@ __extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
 vand_s16 (int16x4_t __a, int16x4_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x4_t){0};
 }
 
@@ -186,6 +210,7 @@ __extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
 vdup_n_s16 (int16_t __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x4_t){0};
 }
 
@@ -193,6 +218,7 @@ __extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
 vreinterpret_s16_u16 (uint16x4_t __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x4_t){0};
 }
 
@@ -200,6 +226,7 @@ __extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
 vset_lane_s16 (int16_t __a, int16x4_t __b, const int __c)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x4_t){0};
 }
 
@@ -207,6 +234,7 @@ __extension__ static __inline uint16x4_t __attribute__ ((__always_inline__))
 vset_lane_u16 (uint16_t __a, uint16x4_t __b, const int __c)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (uint16x4_t){0};
 }
 
@@ -214,6 +242,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vshlq_n_s32 (int32x4_t __a, const int __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -221,6 +250,7 @@ __extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
 vshrn_n_s32 (int32x4_t __a, const int __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x4_t){0};
 }
 
@@ -228,6 +258,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vqdmlal_s16 (int32x4_t __a, int16x4_t __b, int16x4_t __c)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -235,6 +266,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vdupq_n_s32 (int32_t __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -242,6 +274,7 @@ __extension__ static __inline uint32x4_t __attribute__ ((__always_inline__))
 vdupq_n_u32 (uint32_t __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (uint32x4_t){0};
 }
 
@@ -249,6 +282,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vld1q_s32 (const int32_t * __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -256,6 +290,7 @@ __extension__ static __inline uint32x4_t __attribute__ ((__always_inline__))
 vld1q_u32 (const uint32_t * __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (uint32x4_t){0};
 }
 
@@ -263,6 +298,7 @@ __extension__ static __inline uint16x4_t __attribute__ ((__always_inline__))
 vmovn_u32 (uint32x4_t __a)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (uint16x4_t){0};
 }
 
@@ -270,6 +306,7 @@ __extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
 vorr_s16 (int16x4_t __a, int16x4_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x4_t){0};
 }
 
@@ -277,6 +314,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vqdmulhq_s32 (int32x4_t __a, int32x4_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -284,6 +322,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vqdmull_s16 (int16x4_t __a, int16x4_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -291,6 +330,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vqrdmulhq_n_s32 (int32x4_t __a, int32_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -298,6 +338,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vqrdmulhq_s32 (int32x4_t __a, int32x4_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -305,6 +346,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vsetq_lane_s32 (int32_t __a, int32x4_t __b, const int __c)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -312,6 +354,7 @@ __extension__ static __inline int32x4_t __attribute__ ((__always_inline__))
 vshll_n_s16 (int16x4_t __a, const int __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int32x4_t){0};
 }
 
@@ -319,6 +362,7 @@ __extension__ static __inline uint16x4_t __attribute__ ((__always_inline__))
 vshr_n_u16 (uint16x4_t __a, const int __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (uint16x4_t){0};
 }
 
@@ -326,6 +370,7 @@ __extension__ static __inline uint16x4_t __attribute__ ((__always_inline__))
 vshrn_n_u32 (uint32x4_t __a, const int __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (uint16x4_t){0};
 }
 
@@ -333,6 +378,7 @@ __extension__ static __inline void __attribute__ ((__always_inline__))
 vst1q_s32 (int32_t * __a, int32x4_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   // __builtin_neon_vst1v4si ((__builtin_neon_si *) __a, __b);
 }
 
@@ -340,6 +386,7 @@ __extension__ static __inline int16x4_t __attribute__ ((__always_inline__))
 vsub_s16 (int16x4_t __a, int16x4_t __b)
 {
   /* TODO COMPAT */
+  LOG_COMPAT_TODO();
   return (int16x4_t){0};
 }
 
