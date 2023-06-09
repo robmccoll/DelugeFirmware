@@ -97,44 +97,44 @@ union iodefine_reg16_8_t
 
 
 #include "iodefines/adc_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/bsc_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/ceu_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/cpg_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/disc_iodefine.h"                            /* (V1.00a) */
+// #include "iodefines/bsc_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/ceu_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/cpg_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/disc_iodefine.h"                            /* (V1.00a) */
 #include "iodefines/dmac_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/dvdec_iodefine.h"                           /* (V1.00a) */
-#include "iodefines/ether_iodefine.h"                           /* (V1.00a) */
-#include "iodefines/flctl_iodefine.h"                           /* (V1.00a) */
-#include "iodefines/gpio_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/ieb_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/inb_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/dvdec_iodefine.h"                           /* (V1.00a) */
+// #include "iodefines/ether_iodefine.h"                           /* (V1.00a) */
+// #include "iodefines/flctl_iodefine.h"                           /* (V1.00a) */
+// #include "iodefines/gpio_iodefine.h"                            /* (V1.00a) */
+// #include "iodefines/ieb_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/inb_iodefine.h"                             /* (V1.00a) */
 #include "iodefines/intc_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/irda_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/jcu_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/l2c_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/lin_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/lvds_iodefine.h"                            /* (V1.01a) */
-#include "iodefines/mlb_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/mmc_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/irda_iodefine.h"                            /* (V1.00a) */
+// #include "iodefines/jcu_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/l2c_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/lin_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/lvds_iodefine.h"                            /* (V1.01a) */
+// #include "iodefines/mlb_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/mmc_iodefine.h"                             /* (V1.00a) */
 #include "iodefines/mtu2_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/ostm_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/pfv_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/pwm_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/riic_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/romdec_iodefine.h"                          /* (V1.00a) */
-#include "iodefines/rscan0_iodefine.h"                          /* (V1.00a) */
-#include "iodefines/rspi_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/rtc_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/scif_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/scim_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/scux_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/sdg_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/spdif_iodefine.h"                           /* (V1.00a) */
-#include "iodefines/spibsc_iodefine.h"                          /* (V1.01a) */
-#include "iodefines/ssif_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/usb20_iodefine.h"                           /* (V1.00a) */
-#include "iodefines/vdc5_iodefine.h"                            /* (V1.00a) */
-#include "iodefines/wdt_iodefine.h"                             /* (V1.00a) */
-#include "iodefines/dvdec_iodefine.h"
-#include "iodefines/uahv_iodefine.h"
+// #include "iodefines/ostm_iodefine.h"                            /* (V1.00a) */
+// #include "iodefines/pfv_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/pwm_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/riic_iodefine.h"                            /* (V1.00a) */
+// #include "iodefines/romdec_iodefine.h"                          /* (V1.00a) */
+// #include "iodefines/rscan0_iodefine.h"                          /* (V1.00a) */
+// #include "iodefines/rspi_iodefine.h"                            /* (V1.00a) */
+// #include "iodefines/rtc_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/scif_iodefine.h"                            /* (V1.00a) */
+// #include "iodefines/scim_iodefine.h"                            /* (V1.00a) */
+// #include "iodefines/scux_iodefine.h"                            /* (V1.00a) */
+// #include "iodefines/sdg_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/spdif_iodefine.h"                           /* (V1.00a) */
+// #include "iodefines/spibsc_iodefine.h"                          /* (V1.01a) */
+// #include "iodefines/ssif_iodefine.h"                            /* (V1.00a) */
+// #include "iodefines/usb20_iodefine.h"                           /* (V1.00a) */
+// #include "iodefines/vdc5_iodefine.h"                            /* (V1.00a) */
+// #include "iodefines/wdt_iodefine.h"                             /* (V1.00a) */
+// #include "iodefines/dvdec_iodefine.h"
+// #include "iodefines/uahv_iodefine.h"
 #endif

@@ -18,16 +18,18 @@
 #ifndef DRIVERS_ALL_CPUS_MTU_ALL_CPUS_H_
 #define DRIVERS_ALL_CPUS_MTU_ALL_CPUS_H_
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "mtu.h"
 
-static inline void timerEnableInterruptsTGRA(int timerNo) {
-	*TIER[timerNo] = 1;
+void timerEnableInterruptsTGRA(int timerNo);
+
+void timerDisableInterruptsTGRA(int timerNo);
+
+#ifdef __cplusplus
 }
-
-static inline void timerDisableInterruptsTGRA(int timerNo) {
-	*TIER[timerNo] = 0;
-}
-
-
+#endif
 
 #endif /* DRIVERS_ALL_CPUS_MTU_ALL_CPUS_H_ */
