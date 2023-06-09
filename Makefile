@@ -22,10 +22,10 @@
 #   use ASM on x86 unless we need the cycles to keep up, don't use threads
 #   unless it's to emulate asynchronous hardware components, ...)
 
-CPP_SRC=$(wildcard src/*.cpp)
-CPP_OBJ=$(subst .cpp,.o,$(subst src/,obj/,$(CPP_SRC)))
+CPP_SRC=$(wildcard src/*.cpp) $(wildcard src/compat/*.cpp)
+CPP_OBJ=$(subst .cpp,.cpp.o,$(subst src/,obj/,$(CPP_SRC)))
 C_SRC=$(wildcard src/*.c) $(wildcard src/compat/*.c)
-C_OBJ=$(subst .c,.o,$(subst src/,obj/,$(C_SRC)))
+C_OBJ=$(subst .c,.c.o,$(subst src/,obj/,$(C_SRC)))
 INCLUDE=-I src/ -I src/compat/
 
 # Add debug for now
@@ -40,10 +40,10 @@ obj:
 obj/compat:
 	mkdir -p obj/compat
 
-obj/%.o: src/%.cpp | obj obj/compat
+obj/%.cpp.o: src/%.cpp | obj obj/compat
 	$(CXX) $(FLAGS) -c -o $@ $(INCLUDE) $^
 
-obj/%.o: src/%.c | obj
+obj/%.c.o: src/%.c | obj
 	$(CC) $(FLAGS) -c -o $@ $(INCLUDE) $^
 
 .PHONY: clean
