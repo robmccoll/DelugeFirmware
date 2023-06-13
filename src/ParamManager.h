@@ -146,9 +146,7 @@ public:
 #if ALPHA_OR_BETA_VERSION
 	virtual ParamManagerForTimeline* toForTimeline();
 #else
-	inline ParamManagerForTimeline* toForTimeline() {
-		return (ParamManagerForTimeline*)this;
-	}
+	inline ParamManagerForTimeline* toForTimeline() { return (ParamManagerForTimeline*)this; }
 #endif
 
 	bool resonanceBackwardsCompatibilityProcessed;

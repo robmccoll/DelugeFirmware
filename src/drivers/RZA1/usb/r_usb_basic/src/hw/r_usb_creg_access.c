@@ -500,7 +500,7 @@ uint32_t hw_usb_read_fifo32(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 data = USB200.CFIFO.UINT32;
 #else
-                data = USB201.CFIFO.UINT32;
+                data                    = USB201.CFIFO.UINT32;
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -510,7 +510,7 @@ uint32_t hw_usb_read_fifo32(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 data = USB200.D0FIFO.UINT32;
 #else
-                data = USB201.D0FIFO.UINT32;
+                data                    = USB201.D0FIFO.UINT32;
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -520,7 +520,7 @@ uint32_t hw_usb_read_fifo32(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 data = USB200.D1FIFO.UINT32;
 #else  /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
-                data = USB201.D1FIFO.UINT32;
+                data                    = USB201.D1FIFO.UINT32;
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -588,7 +588,7 @@ void hw_usb_write_fifo32(usb_utr_t* ptr, uint16_t pipemode, uint32_t data)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 USB200.CFIFO.UINT32 = data;
 #else
-                USB201.CFIFO.UINT32 = data;
+                USB201.CFIFO.UINT32     = data;
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -598,7 +598,7 @@ void hw_usb_write_fifo32(usb_utr_t* ptr, uint16_t pipemode, uint32_t data)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 USB200.D0FIFO.UINT32 = data;
 #else
-                USB201.D0FIFO.UINT32 = data;
+                USB201.D0FIFO.UINT32    = data;
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -608,7 +608,7 @@ void hw_usb_write_fifo32(usb_utr_t* ptr, uint16_t pipemode, uint32_t data)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 USB200.D1FIFO.UINT32 = data;
 #else
-                USB201.D1FIFO.UINT32 = data;
+                USB201.D1FIFO.UINT32    = data;
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -676,7 +676,7 @@ uint16_t hw_usb_read_fifo16(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 data = USB200.CFIFO.UINT16[H];
 #else
-                data = USB201.CFIFO.UINT16[H];
+                data                    = USB201.CFIFO.UINT16[H];
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -686,7 +686,7 @@ uint16_t hw_usb_read_fifo16(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 data = USB200.D0FIFO.UINT16[H];
 #else
-                data = USB201.D0FIFO.UINT16[H];
+                data                    = USB201.D0FIFO.UINT16[H];
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -696,7 +696,7 @@ uint16_t hw_usb_read_fifo16(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 data = USB200.D1FIFO.UINT16[H];
 #else
-                data = USB201.D1FIFO.UINT16[H];
+                data                    = USB201.D1FIFO.UINT16[H];
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -765,7 +765,7 @@ void hw_usb_write_fifo16(usb_utr_t* ptr, uint16_t pipemode, uint16_t data)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 USB200.CFIFO.UINT16[H] = data;
 #else
-                USB201.CFIFO.UINT16[H] = data;
+                USB201.CFIFO.UINT16[H]  = data;
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -852,7 +852,7 @@ void hw_usb_write_fifo8(usb_utr_t* ptr, uint16_t pipemode, uint8_t data)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 USB200.CFIFO.UINT8[HH] = data;
 #else
-                USB201.CFIFO.UINT8[HH] = data;
+                USB201.CFIFO.UINT8[HH]  = data;
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -940,7 +940,7 @@ void* hw_usb_get_fifosel_adr(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 p_reg = (void*)&(USB200.CFIFOSEL);
 #else
-                p_reg = (void*)&(USB201.CFIFOSEL);
+                p_reg                   = (void*)&(USB201.CFIFOSEL);
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -951,7 +951,7 @@ void* hw_usb_get_fifosel_adr(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 p_reg = (void*)&(USB200.D0FIFOSEL);
 #else
-                p_reg = (void*)&(USB201.D0FIFOSEL);
+                p_reg                   = (void*)&(USB201.D0FIFOSEL);
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -962,7 +962,7 @@ void* hw_usb_get_fifosel_adr(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 p_reg = (void*)&(USB200.D1FIFOSEL);
 #else
-                p_reg = (void*)&(USB201.D1FIFOSEL);
+                p_reg                   = (void*)&(USB201.D1FIFOSEL);
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -1169,7 +1169,7 @@ static void* hw_usb_get_fifoctr_adr(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 p_reg = (void*)&(USB200.CFIFOCTR);
 #else
-                p_reg = (void*)&(USB201.CFIFOCTR);
+                p_reg                   = (void*)&(USB201.CFIFOCTR);
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -1180,7 +1180,7 @@ static void* hw_usb_get_fifoctr_adr(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 p_reg = (void*)&(USB200.D0FIFOCTR);
 #else
-                p_reg = (void*)&(USB201.D0FIFOCTR);
+                p_reg                   = (void*)&(USB201.D0FIFOCTR);
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;
@@ -1191,7 +1191,7 @@ static void* hw_usb_get_fifoctr_adr(usb_utr_t* ptr, uint16_t pipemode)
 #if USB_CFG_USE_USBIP == USB_CFG_IP0
                 p_reg = (void*)&(USB200.D1FIFOCTR);
 #else
-                p_reg = (void*)&(USB201.D1FIFOCTR);
+                p_reg                   = (void*)&(USB201.D1FIFOCTR);
 #endif /* USB_CFG_USE_USBIP == USB_CFG_IP0 */
 
                 break;

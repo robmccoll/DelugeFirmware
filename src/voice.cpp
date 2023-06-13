@@ -2392,7 +2392,9 @@ void renderPDWave(const int16_t* table, const int16_t* secondTable, int numBitsI
 void getTableNumber(uint32_t phaseIncrementForCalculations, int* tableNumber, int* tableSize) {
 
 	if (phaseIncrementForCalculations <= 1247086) {
-		{ *tableNumber = 0; }
+		{
+			*tableNumber = 0;
+		}
 		*tableSize = 13;
 	}
 	else if (phaseIncrementForCalculations <= 2494173) {

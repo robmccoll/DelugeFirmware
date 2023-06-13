@@ -37,12 +37,8 @@ public:
 	void renderOLED();
 #endif
 
-	void unlearnAction() final {
-		MenuItemWithCCLearning::unlearnAction();
-	}
-	bool allowsLearnMode() final {
-		return MenuItemWithCCLearning::allowsLearnMode();
-	}
+	void unlearnAction() final { MenuItemWithCCLearning::unlearnAction(); }
+	bool allowsLearnMode() final { return MenuItemWithCCLearning::allowsLearnMode(); }
 	void learnKnob(MIDIDevice* fromDevice, int whichKnob, int modKnobMode, int midiChannel) final {
 		MenuItemWithCCLearning::learnKnob(fromDevice, whichKnob, modKnobMode, midiChannel);
 	};

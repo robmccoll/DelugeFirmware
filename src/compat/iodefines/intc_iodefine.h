@@ -535,7 +535,9 @@ struct st_intc {                    /* INTC             */
 	volatile uint16_t ICR0;               /*  ICR0            */
 	volatile uint16_t ICR1;               /*  ICR1            */
 	//volatile uint16_t IRQRR;                                  /*  IRQRR           */
-	volatile union { volatile uint16_t WORD; } IRQRR;
+	volatile union {
+		volatile uint16_t WORD;
+	} IRQRR;
 };
 
 extern struct st_intc INTC;

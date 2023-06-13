@@ -111,10 +111,8 @@ protected:
 	int mainButtonAction(bool on);
 	virtual void exitAction();
 	virtual int backButtonAction();
-	virtual void folderContentsReady(int entryDirection) {
-	}
-	virtual void currentFileChanged(int movementDirection) {
-	}
+	virtual void folderContentsReady(int entryDirection) {}
+	virtual void currentFileChanged(int movementDirection) {}
 	void displayText(bool blinkImmediately = false);
 	static Slot getSlot(char const* displayName);
 	static int readFileItemsFromFolderAndMemory(Song* song, int instrumentType, char const* filePrefixHere,
