@@ -30,42 +30,39 @@
 #define ADC_IODEFINE_H
 /* ->SEC M1.10.1 : Not magic number */
 
-struct st_adc
-{                                                          /* ADC              */
-    volatile uint16_t ADDRA;                                  /*  ADDRA           */
-    volatile uint16_t ADDRB;                                  /*  ADDRB           */
-    volatile uint16_t ADDRC;                                  /*  ADDRC           */
-    volatile uint16_t ADDRD;                                  /*  ADDRD           */
-    volatile uint16_t ADDRE;                                  /*  ADDRE           */
-    volatile uint16_t ADDRF;                                  /*  ADDRF           */
-    volatile uint16_t ADDRG;                                  /*  ADDRG           */
-    volatile uint16_t ADDRH;                                  /*  ADDRH           */
-    volatile uint8_t   dummy32[16];                            /*                  */
-    volatile uint16_t ADCMPHA;                                /*  ADCMPHA         */
-    volatile uint16_t ADCMPLA;                                /*  ADCMPLA         */
-    volatile uint16_t ADCMPHB;                                /*  ADCMPHB         */
-    volatile uint16_t ADCMPLB;                                /*  ADCMPLB         */
-    volatile uint16_t ADCMPHC;                                /*  ADCMPHC         */
-    volatile uint16_t ADCMPLC;                                /*  ADCMPLC         */
-    volatile uint16_t ADCMPHD;                                /*  ADCMPHD         */
-    volatile uint16_t ADCMPLD;                                /*  ADCMPLD         */
-    volatile uint16_t ADCMPHE;                                /*  ADCMPHE         */
-    volatile uint16_t ADCMPLE;                                /*  ADCMPLE         */
-    volatile uint16_t ADCMPHF;                                /*  ADCMPHF         */
-    volatile uint16_t ADCMPLF;                                /*  ADCMPLF         */
-    volatile uint16_t ADCMPHG;                                /*  ADCMPHG         */
-    volatile uint16_t ADCMPLG;                                /*  ADCMPLG         */
-    volatile uint16_t ADCMPHH;                                /*  ADCMPHH         */
-    volatile uint16_t ADCMPLH;                                /*  ADCMPLH         */
-    volatile uint8_t   dummy33[32];                            /*                  */
-    volatile uint16_t ADCSR;                                  /*  ADCSR           */
-    volatile uint16_t ADCMPER;                                /*  ADCMPER         */
-    volatile uint16_t ADCMPSR;                                /*  ADCMPSR         */
+struct st_adc {                   /* ADC              */
+	volatile uint16_t ADDRA;      /*  ADDRA           */
+	volatile uint16_t ADDRB;      /*  ADDRB           */
+	volatile uint16_t ADDRC;      /*  ADDRC           */
+	volatile uint16_t ADDRD;      /*  ADDRD           */
+	volatile uint16_t ADDRE;      /*  ADDRE           */
+	volatile uint16_t ADDRF;      /*  ADDRF           */
+	volatile uint16_t ADDRG;      /*  ADDRG           */
+	volatile uint16_t ADDRH;      /*  ADDRH           */
+	volatile uint8_t dummy32[16]; /*                  */
+	volatile uint16_t ADCMPHA;    /*  ADCMPHA         */
+	volatile uint16_t ADCMPLA;    /*  ADCMPLA         */
+	volatile uint16_t ADCMPHB;    /*  ADCMPHB         */
+	volatile uint16_t ADCMPLB;    /*  ADCMPLB         */
+	volatile uint16_t ADCMPHC;    /*  ADCMPHC         */
+	volatile uint16_t ADCMPLC;    /*  ADCMPLC         */
+	volatile uint16_t ADCMPHD;    /*  ADCMPHD         */
+	volatile uint16_t ADCMPLD;    /*  ADCMPLD         */
+	volatile uint16_t ADCMPHE;    /*  ADCMPHE         */
+	volatile uint16_t ADCMPLE;    /*  ADCMPLE         */
+	volatile uint16_t ADCMPHF;    /*  ADCMPHF         */
+	volatile uint16_t ADCMPLF;    /*  ADCMPLF         */
+	volatile uint16_t ADCMPHG;    /*  ADCMPHG         */
+	volatile uint16_t ADCMPLG;    /*  ADCMPLG         */
+	volatile uint16_t ADCMPHH;    /*  ADCMPHH         */
+	volatile uint16_t ADCMPLH;    /*  ADCMPLH         */
+	volatile uint8_t dummy33[32]; /*                  */
+	volatile uint16_t ADCSR;      /*  ADCSR           */
+	volatile uint16_t ADCMPER;    /*  ADCMPER         */
+	volatile uint16_t ADCMPSR;    /*  ADCMPSR         */
 };
 
-
-#define ADC     (*(struct st_adc     *)0xE8005800uL) /* ADC */
-
+#define ADC (*(struct st_adc*)0xE8005800uL) /* ADC */
 
 #define ADCADDRA ADC.ADDRA
 #define ADCADDRB ADC.ADDRB

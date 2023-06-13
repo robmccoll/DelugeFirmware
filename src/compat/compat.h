@@ -1,5 +1,5 @@
-#ifndef  COMPAT_H
-#define  COMPAT_H
+#ifndef COMPAT_H
+#define COMPAT_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -15,4 +15,4 @@ extern "C" {
 }
 #endif
 
-#endif  /*COMPAT_H*/
+#endif /*COMPAT_H*/

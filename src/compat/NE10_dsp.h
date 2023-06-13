@@ -29,7 +29,6 @@
  * NE10 Library : inc/NE10_dsp.h
  */
 
-
 #include "NE10_types.h"
 
 #ifndef NE10_DSP_H
@@ -127,9 +126,9 @@ extern "C" {
  *                  structure is set up
  */
 
-    extern ne10_fft_r2c_cfg_int32_t ne10_fft_alloc_r2c_int32 (ne10_int32_t nfft);
+extern ne10_fft_r2c_cfg_int32_t ne10_fft_alloc_r2c_int32(ne10_int32_t nfft);
 
-    /**
+/**
      * @brief Mixed radix-2/4 real-to-complex FFT of 32-bit fixed point Q31 data.
      *
      * @param[out]  *fout            pointer to the output buffer
@@ -144,13 +143,10 @@ extern "C" {
      *
      * For the inverse transform (IFFT), call @ref ne10_fft_c2r_1d_int32.
      */
-    extern void ne10_fft_r2c_1d_int32_neon (ne10_fft_cpx_int32_t *fout,
-                                            ne10_int32_t *fin,
-                                            ne10_fft_r2c_cfg_int32_t cfg,
-                                            ne10_int32_t scaled_flag);
+extern void ne10_fft_r2c_1d_int32_neon(ne10_fft_cpx_int32_t* fout, ne10_int32_t* fin, ne10_fft_r2c_cfg_int32_t cfg,
+                                       ne10_int32_t scaled_flag);
 
-
-    /**
+/**
      * @brief Mixed radix-2/4 complex-to-real IFFT of 32-bit fixed point Q31 data.
      *
      * @param[out]  *fout            pointer to the output buffer
@@ -163,11 +159,8 @@ extern "C" {
      * @ref ne10_fft_c2r_1d_int32_neon. This is an out-of-place algorithm.
      * For usage information, please check test/test_suite_fft_int32.c.
      */
-    extern void ne10_fft_c2r_1d_int32_neon (ne10_int32_t *fout,
-                                            ne10_fft_cpx_int32_t *fin,
-                                            ne10_fft_r2c_cfg_int32_t cfg,
-                                            ne10_int32_t scaled_flag);
-
+extern void ne10_fft_c2r_1d_int32_neon(ne10_int32_t* fout, ne10_fft_cpx_int32_t* fin, ne10_fft_r2c_cfg_int32_t cfg,
+                                       ne10_int32_t scaled_flag);
 
 #ifdef __cplusplus
 }

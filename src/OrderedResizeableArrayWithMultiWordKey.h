@@ -20,16 +20,15 @@
 
 #include "OrderedResizeableArray.h"
 
-
 // This class extends OrderedResizeableArrayWith32bitKey so that if we wish, we can still use that class's single-word search functions, where we only care about the first word.
 
 class OrderedResizeableArrayWithMultiWordKey : public OrderedResizeableArrayWith32bitKey {
 public:
 	OrderedResizeableArrayWithMultiWordKey(int newElementSize = sizeof(uint32_t) * 2, int newNumWordsInKey = 2);
-	int searchMultiWord(uintptr_t * __restrict__ keyWords, int comparison, int rangeBegin = 0, int rangeEnd = -1);
-	int searchMultiWordExact(uintptr_t * __restrict__ keyWords, int* getIndexToInsertAt = NULL, int rangeBegin = 0);
-	int insertAtKeyMultiWord(uintptr_t * __restrict__ keyWords, int rangeBegin = 0, int rangeEnd = -1);
-	bool deleteAtKeyMultiWord(uintptr_t * __restrict__ keyWords);
+	int searchMultiWord(uintptr_t* __restrict__ keyWords, int comparison, int rangeBegin = 0, int rangeEnd = -1);
+	int searchMultiWordExact(uintptr_t* __restrict__ keyWords, int* getIndexToInsertAt = NULL, int rangeBegin = 0);
+	int insertAtKeyMultiWord(uintptr_t* __restrict__ keyWords, int rangeBegin = 0, int rangeEnd = -1);
+	bool deleteAtKeyMultiWord(uintptr_t* __restrict__ keyWords);
 
 	int numWordsInKey;
 };

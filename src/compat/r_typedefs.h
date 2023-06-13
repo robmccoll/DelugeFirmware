@@ -33,7 +33,6 @@
 *               : 21.10.2014 1.00
 *******************************************************************************/
 
-
 /******************************************************************************
 Includes <System Includes> , "Project Includes"
 ******************************************************************************/
@@ -42,9 +41,8 @@ Includes <System Includes> , "Project Includes"
 #ifndef R_TYPEDEFS_H
 #define R_TYPEDEFS_H
 
-
 /* in case <stdio.h> has defined it. */
-#ifndef NULL             
+#ifndef NULL
 #define NULL 0
 #endif
 
@@ -53,14 +51,14 @@ Macro definitions
 ******************************************************************************/
 #if !defined(__bool_true_false_are_defined) && !defined(__cplusplus)
 
-#define     false 0
-#define     true  1
+#define false 0
+#define true 1
 
 #endif
 
-#define     UNUSED_PARAM(param)             (void)(param)
+#define UNUSED_PARAM(param) (void)(param)
 
-#define     UNUSED_VARIABLE(param)          (void)(param)
+#define UNUSED_VARIABLE(param) (void)(param)
 
 typedef unsigned char byte; // Added by Rohan. Deprecate this!
 
@@ -68,9 +66,9 @@ typedef unsigned char byte; // Added by Rohan. Deprecate this!
 Typedef definitions
 COMPAT - using stdint.h types
 ******************************************************************************/
-typedef char                char_t;
-typedef unsigned int        bool_t;
-typedef int                 int_t;
+typedef char char_t;
+typedef unsigned int bool_t;
+typedef int int_t;
 // typedef signed char         int8_t;
 // typedef signed short        int16_t;
 // typedef signed long         int32_t;
@@ -85,4 +83,3 @@ typedef int                 int_t;
 
 /* R_TYPEDEFS_H */
 #endif
-

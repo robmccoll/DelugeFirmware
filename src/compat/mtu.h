@@ -31,7 +31,6 @@ void disableTimer(int timerNo);
 
 bool_t isTimerEnabled(int timerNo);
 
-
 static volatile uint8_t* const TIER[] = {&MTU2.TIER_0, &MTU2.TIER_1, &MTU2.TIER_2, &MTU2.TIER_3, &MTU2.TIER_4};
 
 static volatile uint8_t* const TSR[] = {&MTU2.TSR_0, &MTU2.TSR_1, &MTU2.TSR_2, &MTU2.TSR_3, &MTU2.TSR_4};

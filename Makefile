@@ -43,7 +43,7 @@ obj/compat:
 obj/%.cpp.o: src/%.cpp | obj obj/compat
 	$(CXX) $(FLAGS) -c -o $@ $(INCLUDE) $^
 
-obj/%.c.o: src/%.c | obj
+obj/%.c.o: src/%.c | obj obj/compat
 	$(CC) $(FLAGS) -c -o $@ $(INCLUDE) $^
 
 .PHONY: clean

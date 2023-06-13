@@ -54,42 +54,46 @@ void* delugeAlloc(int requiredSize);
 void delugeDealloc(void* address);
 
 #define NE10_MALLOC delugeAlloc
-#define NE10_FREE(p) \
-    do { \
-    	delugeDealloc(p); \
-        p = NULL; \
-    }while(0)
+#define NE10_FREE(p)                                                                                                   \
+	do {                                                                                                               \
+		delugeDealloc(p);                                                                                              \
+		p = NULL;                                                                                                      \
+	} while (0)
 
-#define NE10_MIN(a,b) ((a)>(b)?(b):(a))
-#define NE10_MAX(a,b) ((a)<(b)?(b):(a))
+#define NE10_MIN(a, b) ((a) > (b) ? (b) : (a))
+#define NE10_MAX(a, b) ((a) < (b) ? (b) : (a))
 
-#define NE10_BYTE_ALIGNMENT(address, alignment) \
-    do { \
-        (address) = (((address) + ((alignment) - 1)) & ~ ((alignment) - 1)); \
-    }while (0)
+#define NE10_BYTE_ALIGNMENT(address, alignment)                                                                        \
+	do {                                                                                                               \
+		(address) = (((address) + ((alignment)-1)) & ~((alignment)-1));                                                \
+	} while (0)
 
 /////////////////////////////////////////////////////////
 // macro definitions for float to fixed point
 /////////////////////////////////////////////////////////
-#define NE10_F2I16_MAX         32767
-#define NE10_F2I16_SHIFT       15
-#define NE10_F2I16_SAMPPROD    ne10_int32_t
-#define NE10_F2I16_OP(x)       (ne10_int16_t)((x)*NE10_F2I16_MAX + 0.5f)
-#define NE10_F2I16_SROUND(x)   (ne10_int16_t)((((x)<<1)+(1<<NE10_F2I16_SHIFT))>>16)
-#define NE10_F2I16_SMUL(a,b)   ((NE10_F2I16_SAMPPROD)(a)*(b))
-#define NE10_F2I16_FIXDIV(c,div) \
-    do {    ((c).r) = ( ( ((c).r)/div) );  \
-        ((c).i) = ( ( ((c).i)/div) ); }while (0)
+#define NE10_F2I16_MAX 32767
+#define NE10_F2I16_SHIFT 15
+#define NE10_F2I16_SAMPPROD ne10_int32_t
+#define NE10_F2I16_OP(x) (ne10_int16_t)((x)*NE10_F2I16_MAX + 0.5f)
+#define NE10_F2I16_SROUND(x) (ne10_int16_t)((((x) << 1) + (1 << NE10_F2I16_SHIFT)) >> 16)
+#define NE10_F2I16_SMUL(a, b) ((NE10_F2I16_SAMPPROD)(a) * (b))
+#define NE10_F2I16_FIXDIV(c, div)                                                                                      \
+	do {                                                                                                               \
+		((c).r) = ((((c).r) / div));                                                                                   \
+		((c).i) = ((((c).i) / div));                                                                                   \
+	} while (0)
 
-#define NE10_F2I32_MAX         2147483647
-#define NE10_F2I32_SHIFT       31
-#define NE10_F2I32_SAMPPROD    ne10_int64_t
-#define NE10_F2I32_OP(x)       (ne10_int32_t)((x)*NE10_F2I32_MAX + 0.5f)
-#define NE10_F2I32_SROUND(x)   (ne10_int32_t) ((x)>>NE10_F2I32_SHIFT)
-#define NE10_F2I32_SMUL(a,b)    ((NE10_F2I32_SAMPPROD)(a)*(b))
-#define NE10_F2I32_FIXDIV(c,div) \
-    do {    ((c).r) = ( ( ((c).r)/div) );  \
-        ((c).i) = ( ( ((c).i)/div) ); }while (0)
+#define NE10_F2I32_MAX 2147483647
+#define NE10_F2I32_SHIFT 31
+#define NE10_F2I32_SAMPPROD ne10_int64_t
+#define NE10_F2I32_OP(x) (ne10_int32_t)((x)*NE10_F2I32_MAX + 0.5f)
+#define NE10_F2I32_SROUND(x) (ne10_int32_t)((x) >> NE10_F2I32_SHIFT)
+#define NE10_F2I32_SMUL(a, b) ((NE10_F2I32_SAMPPROD)(a) * (b))
+#define NE10_F2I32_FIXDIV(c, div)                                                                                      \
+	do {                                                                                                               \
+		((c).r) = ((((c).r) / div));                                                                                   \
+		((c).i) = ((((c).i) / div));                                                                                   \
+	} while (0)
 
 #ifdef __cplusplus
 }

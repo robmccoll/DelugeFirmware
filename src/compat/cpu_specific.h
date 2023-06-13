@@ -23,24 +23,20 @@
 #define DELUGE_MODEL_40_PAD 0
 #define DELUGE_MODEL_144_PAD 1
 
-
 #define DELUGE_MODEL DELUGE_MODEL_144_PAD // Change this as needed
 
 #define NUM_CV_CHANNELS 2
 #define NUM_GATE_CHANNELS 4
 
-
 #define DMA_LVL_FOR_SSI (1 << 6)
 #define DMARS_FOR_SSI0_TX 0x00E1
 #define DMARS_FOR_SSI0_RX 0x00E2
-
 
 #define DMA_AM_FOR_SCIF (0b010 << 8)
 #define DMARS_FOR_SCIF0_RX 0b001100010
 #define DMARS_FOR_SCIF0_TX 0b001100001
 
-#define DMARS_FOR_RSPI_TX	0b100100001
-
+#define DMARS_FOR_RSPI_TX 0b100100001
 
 // UART ----------------------------------------------------
 #define UART_ITEM_PIC 0
@@ -52,14 +48,14 @@
 #define UART_ITEM_PIC_INDICATORS UART_ITEM_PIC
 
 // PIC UART buffer sizes - different here on A1 because on A2 we have 3 of them
-#define PIC_TX_BUFFER_SIZE 1024 // Theoretically I should be able to do just 512, and it almost works, but occasionally the cursor pos won't update - at the end of an audio clip record
+#define PIC_TX_BUFFER_SIZE                                                                                             \
+	1024 // Theoretically I should be able to do just 512, and it almost works, but occasionally the cursor pos won't update - at the end of an audio clip record
 #define PIC_RX_BUFFER_SIZE 64
 
 #define TIMING_CAPTURE_ITEM_MIDI 0
 #define NUM_TIMING_CAPTURE_ITEMS 1
 
 #define UART_FULL_SPEED_PIC_PADS_HZ 200000 // 400000 glitches sometimes, especially if you zoom lots
-
 
 #if DELUGE_MODEL == DELUGE_MODEL_40_PAD
 #define NUM_BUTTON_ROWS 3
@@ -80,16 +76,14 @@
 #define UART_CHANNEL_PIC 1
 #define UART_INITIAL_SPEED_PIC_PADS_HZ 31250
 #define UI_MS_PER_REFRESH 50
-#define UI_MS_PER_REFRESH_SCROLLING 7 // Any faster than this is faster than the UART bus can do, so there's a lag, and if we're sending out multiple scrolls fast, the buffer can build up quite a lag
+#define UI_MS_PER_REFRESH_SCROLLING                                                                                    \
+	7 // Any faster than this is faster than the UART bus can do, so there's a lag, and if we're sending out multiple scrolls fast, the buffer can build up quite a lag
 #endif
 
 #define NUM_LED_ROWS 4
 
-
-
 // SPI-BSC ---------------------------------------------------------------------
 #define SPIBSC_CH 0
-
 
 // SSI -------------------------------------------------------------------------
 #define SSI_CHANNEL 0
@@ -98,12 +92,8 @@
 #define NUM_MONO_INPUT_CHANNELS_MAGNITUDE 1
 #define NUM_MONO_OUTPUT_CHANNELS_MAGNITUDE 1
 
-
 // SDHI
 #define SD_PORT 1
-
-
-
 
 // DMA --------------------------------------------------------------------------
 /*
@@ -138,11 +128,6 @@ DMA channels:
 #define MIDI_RX_DMA_CHANNEL 13
 #define MIDI_RX_TIMING_DMA_CHANNEL 14
 
-
-
-
-
-
 extern uintptr_t EXTERNAL_MEMORY_BEGIN;
 extern uintptr_t EXTERNAL_MEMORY_END;
 
@@ -151,12 +136,9 @@ extern uintptr_t EXTERNAL_MEMORY_END;
 extern uintptr_t INTERNAL_MEMORY_BEGIN;
 extern uintptr_t INTERNAL_MEMORY_END;
 
-
 #define UNCACHED_MIRROR_OFFSET 0x40000000
 
-
 #define NUM_LEVEL_INDICATORS 2
-
 
 // Buttons / LEDs ---------------------------------------------------------------
 
@@ -324,7 +306,6 @@ extern uintptr_t INTERNAL_MEMORY_END;
 #define tripletsButtonY 1
 #define tripletsLedX 8
 #define tripletsLedY 1
-
 
 #define BATTERY_LED_1 1
 #define BATTERY_LED_2 1

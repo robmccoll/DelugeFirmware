@@ -29,7 +29,6 @@
  * NE10 Library : inc/NE10.h
  */
 
-
 /**
  * @defgroup groupDSPs Signal Processing Functions
  *

@@ -47,47 +47,34 @@ Includes   <System Includes> , "Project Includes"
 #include "devdrv_intc.h"
 #include "uart_all_cpus.h"
 
+#define SCIF_UART_MODE_W (1)
+#define SCIF_UART_MODE_R (2)
+#define SCIF_UART_MODE_RW (3)
 
-
-
-#define SCIF_UART_MODE_W        (1)
-#define SCIF_UART_MODE_R        (2)
-#define SCIF_UART_MODE_RW       (3)
-
-typedef enum scif_cks_division
-{
-    SCIF_CKS_DIVISION_1,
-    SCIF_CKS_DIVISION_4,
-    SCIF_CKS_DIVISION_16,
-    SCIF_CKS_DIVISION_64
+typedef enum scif_cks_division {
+	SCIF_CKS_DIVISION_1,
+	SCIF_CKS_DIVISION_4,
+	SCIF_CKS_DIVISION_16,
+	SCIF_CKS_DIVISION_64
 } scif_cks_division_t;
-
-
-
-
 
 /******************************************************************************
 Functions Prototypes
 ******************************************************************************/
 
-void   IoInitScif2(void);
+void IoInitScif2(void);
 char_t IoGetchar(uint8_t scifID);
-void   IoPutchar(uint8_t scifID, char_t buffer);
+void IoPutchar(uint8_t scifID, char_t buffer);
 
-
-void io_init_scif (uint8_t scifID);
+void io_init_scif(uint8_t scifID);
 
 void uartInit(int uartItem, uint32_t baudRate);
 void uartSetBaudRate(uint8_t scifID, uint32_t baudRate);
 
-
-void Userdef_SCIF_UART_Init (uint8_t channel, uint8_t mode, uint16_t cks, uint32_t baudRate);
-
-
+void Userdef_SCIF_UART_Init(uint8_t channel, uint8_t mode, uint16_t cks, uint32_t baudRate);
 
 extern char_t picTxBuffer[];
 extern char_t midiTxBuffer[];
-
 
 // These are not thread safe! Do not call in ISRs.
 void bufferMIDIUart(char_t charToSend);
@@ -102,5 +89,5 @@ void bufferPICUart(char_t charToSend);
 #endif
 
 /* SIO_CHAR_H */
-#endif  
+#endif
 /* End of File */
