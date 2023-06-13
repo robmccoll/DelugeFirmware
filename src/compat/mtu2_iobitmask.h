@@ -29,7 +29,7 @@
 #ifndef MTU2_IOBITMASK_H
 #define MTU2_IOBITMASK_H
 
-/* ==== IOレジスタへのマスク値 ==== */
+/* ==== IOWXNl ==== */
 #define MTU2_TCR_2_TPSC (0x07u)
 #define MTU2_TCR_2_CKEG (0x18u)
 #define MTU2_TCR_2_CCLR (0x60u)
@@ -315,7 +315,7 @@
 #define MTU2_TICCR_I2AE (0x04u)
 #define MTU2_TICCR_I2BE (0x08u)
 
-/* ==== IOレジスタへのシフト値 ==== */
+/* ==== IOWXVtgl ==== */
 #define MTU2_TCR_2_TPSC_SHIFT (0u)
 #define MTU2_TCR_2_CKEG_SHIFT (3u)
 #define MTU2_TCR_2_CCLR_SHIFT (5u)
